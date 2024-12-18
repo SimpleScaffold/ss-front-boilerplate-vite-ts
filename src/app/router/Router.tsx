@@ -1,24 +1,40 @@
-import {BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router";
 
-
-const MODULES = import.meta.glob('/src/pages/**/*.tsx', {eager: true});
-
-// 각 모듈의 파일 경로를 기반으로 경로 및 컴포넌트를 생성
-const generateRoutes = (modules) => {
-    return Object.keys(modules).map(filePath => {
-        // 파일 경로에서 디렉토리 경로만 추출 (파일명 제거)
-        const pathParts = filePath.split('/');
-        pathParts.pop(); // 파일명을 드롭합니다.
-
-        // 'index' 파일은 그 자체로 경로로 간주 (e.g., sample/index.tsx -> 'sample/')
-        const routePath = pathParts.slice(3).join('/').toLowerCase(); // '/src/pages/' 부분을 제거
-
-        // 모듈을 컴포넌트로 변환하여 반환
-        const Component = modules[filePath].default;
-        return <Route key={routePath} path={routePath} element={<Component/>}/>;
-    });
+// Modules 타입 정의
+type Modules = {
+    [key: string]: {
+        default: React.ComponentType;
+    }
 };
 
+// MODULES의 타입 단언(type assertion)
+const rawModules: Record<string, unknown> = import.meta.glob('/src/pages/**/*.tsx', { eager: true });
+
+// MODULES를 Modules 타입으로 검증 및 캐스팅
+const MODULES: Modules = Object.fromEntries(
+    Object.entries(rawModules).map(([key, value]) => {
+        // 각 모듈이 기본(default) React 컴포넌트를 내보내는지 검사
+        if (typeof value === 'object' && value !== null && 'default' in value) {
+            return [key, value as { default: React.ComponentType }];
+        }
+        throw new Error(`Module at ${key} does not conform to expected type.`);
+    })
+);
+
+// 모듈에서 라우트를 생성하는 함수
+const generateRoutes = (modules: Modules) => {
+    return Object.keys(modules).map(filePath => {
+        const pathParts = filePath.split('/');
+        pathParts.pop(); // 파일명 제거
+
+        // 라우트 경로 계산
+        const routePath = pathParts.slice(3).join('/').toLowerCase(); // '/src/pages/' 부분 제거
+
+        // 추출한 컴포넌트로 Route를 생성
+        const Component = modules[filePath].default;
+        return <Route key={routePath} path={routePath} element={<Component />} />;
+    });
+};
 
 const Router = () => {
     return (
