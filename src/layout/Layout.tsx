@@ -1,5 +1,5 @@
 import {Outlet} from "react-router";
-import SSlayout from "@/widgets/layout/SSlayout.tsx";
+import SSlayout from "@/layout/components/SSlayout.tsx";
 
 const Layout = () => {
     return (
