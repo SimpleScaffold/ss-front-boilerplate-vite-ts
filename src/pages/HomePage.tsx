@@ -2,7 +2,9 @@ const HomePage = () => {
 
 
     return (
-        <div>
+        <div
+            className={'bg-amber-50'}
+        >
             HomePage
         </div>
     )
