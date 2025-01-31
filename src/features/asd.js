@@ -10,33 +10,34 @@ export type ReducerState<T> = {
 
 export const reducerUtils = {
     init: <T,>(defaultType: T): ReducerState<T> => ({
-        data: defaultType,
-        loading: false,
-        error: false,
-        errorMsg: '',
-    }),
+    data: defaultType,
+    loading: false,
+    error: false,
+    errorMsg: '',
+}),
 
     loading: <T,>(prevData: T): ReducerState<T> => ({
-        data: prevData,
-        loading: true,
-        error: false,
-        errorMsg: '',
-    }),
+    data: prevData,
+    loading: true,
+    error: false,
+    errorMsg: '',
+}),
 
     success: <T,>(data: T): ReducerState<T> => ({
-        data: data,
-        loading: false,
-        error: false,
-        errorMsg: '',
-    }),
+    data: data,
+    loading: false,
+    error: false,
+    errorMsg: '',
+}),
 
     error: <T,>(prevData: T, errorMsg = ''): ReducerState<T> => ({
-        data: prevData,
-        loading: false,
-        error: true,
-        errorMsg: errorMsg,
-    }),
+    data: prevData,
+    loading: false,
+    error: true,
+    errorMsg: errorMsg,
+}),
 }
+
 
 export const reduxMaker = (
     prefix = 'aaa',
@@ -44,22 +45,16 @@ export const reduxMaker = (
     asyncReducers = [],
     localReducers = {},
 ) => {
+
+
+
     return {
-        [`${prefix}Slice`]: createSlice({
-            name: prefix,
-            initialState: initialState,
-            reducers: {
-                initializeAll: () => {
-                    return initialState
-                },
-
-
-
-            },
-        }),
+        [`${prefix}Slice`]: 111,
         [`${prefix}Saga`]: 222,
         [`${prefix}Action`]: 333,
     }
+
+
 
     // type FinalStructure ={
     //     [`${prefix}Slice`]: Slice<StateType>;
@@ -108,7 +103,12 @@ export const reduxMaker = (
 
     // final[`${prefix}Action`] = final[`${prefix}Slice`].actions
     // return final
+
 }
+
+
+
+
 
 
 // //비동기 state 만들기
@@ -201,58 +201,58 @@ export const reduxMaker = (
 //     }
 // }
 //
-// // 최종 리더스
-// export const reduxMaker = (
-//     prefix = '',
-//     asyncRequest = {},
-//     localState = {},
-//     localReducers = {},
-// ) => {
-//     const asyncInitialState = initialStateMaker(asyncRequest)
-//     const final = {}
-//     const allInitialState = {
-//         ...localState,
-//         ...asyncInitialState,
-//     }
-//
-//     final[`${prefix}Slice`] = createSlice({
-//         name: prefix,
-//         initialState: allInitialState,
-//         reducers: {
-//             initializeAll: () => {
-//                 return allInitialState
-//             },
-//             initialize: (state, action) => {
-//                 const itemName = action.payload
-//                 if (
-//                     state[itemName] !== undefined &&
-//                     allInitialState[itemName] !== undefined
-//                 ) {
-//                     state[itemName] = allInitialState[itemName]
-//                 }
-//             },
-//
-//             ...apiReducers(prefix, asyncRequest),
-//             ...localReducers,
-//         },
-//         extraReducers: extraReducers(prefix, asyncRequest),
-//     })
-//
-//     //사가 만들기
-//     final[`${prefix}Saga`] = function* () {
-//         for (const reducerName in asyncRequest) {
-//             yield takeLatest(
-//                 `${prefix}/${reducerName}`,
-//                 createRequestSaga(
-//                     prefix,
-//                     reducerName,
-//                     asyncRequest[reducerName][1],
-//                 ),
-//             )
-//         }
-//     }
-//
-//     //액션 만들기
-//     final[`${prefix}Action`] = final[`${prefix}Slice`].actions
-//     return final
-// }
+// 최종 리더스
+export const reduxMaker = (
+    prefix = '',
+    asyncRequest = {},
+    localState = {},
+    localReducers = {},
+) => {
+    const asyncInitialState = initialStateMaker(asyncRequest)
+    const final = {}
+    const allInitialState = {
+        ...localState,
+        ...asyncInitialState,
+    }
+
+    final[`${prefix}Slice`] = createSlice({
+        name: prefix,
+        initialState: allInitialState,
+        reducers: {
+            initializeAll: () => {
+                return allInitialState
+            },
+            initialize: (state, action) => {
+                const itemName = action.payload
+                if (
+                    state[itemName] !== undefined &&
+                    allInitialState[itemName] !== undefined
+                ) {
+                    state[itemName] = allInitialState[itemName]
+                }
+            },
+
+            ...apiReducers(prefix, asyncRequest),
+            ...localReducers,
+        },
+        extraReducers: extraReducers(prefix, asyncRequest),
+    })
+
+    //사가 만들기
+    final[`${prefix}Saga`] = function* () {
+        for (const reducerName in asyncRequest) {
+            yield takeLatest(
+                `${prefix}/${reducerName}`,
+                createRequestSaga(
+                    prefix,
+                    reducerName,
+                    asyncRequest[reducerName][1],
+                ),
+            )
+        }
+    }
+
+    //액션 만들기
+    final[`${prefix}Action`] = final[`${prefix}Slice`].actions
+    return final
+}
