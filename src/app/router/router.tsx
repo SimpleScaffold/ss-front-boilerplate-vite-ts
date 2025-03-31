@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router'
-import HomePage from 'src/pages/HomePage.jsx'
+import HomePage from 'src/pages/HomePage.tsx'
 
 //NOTE https://reactrouter.com/start/data/routing
 
@@ -7,6 +7,8 @@ import HomePage from 'src/pages/HomePage.jsx'
 // todo lazy loading 적용해야 할까?
 
 const MODULES = import.meta.glob('src/pages/url/**/*.tsx', { eager: true })
+
+
 
 const generateRoutes = (modules) => {
     return Object.entries(modules).map(([path, module]) => {

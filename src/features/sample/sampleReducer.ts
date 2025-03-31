@@ -1,5 +1,5 @@
 import axios from "axios";
-import {reduxMaker} from "src/app/store/redux/reduxUtils.jsx";
+import {reduxMaker} from "src/app/store/redux/reduxUtils.tsx";
 
 const prefix = 'sample'
 
