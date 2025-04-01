@@ -1,13 +1,8 @@
-// ts 로 전환시 필요함
+import type { TypedUseSelectorHook } from 'react-redux'
+import { useDispatch, useSelector, useStore } from 'react-redux'
+import {AppDispatch, AppStore, RootState} from "src/app/store/redux/reduxStore.tsx";
 
-/*
-import {AppDispatch, RootState} from "@/app/store/reduxStore.tsx";
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-type DispatchFunc = () => AppDispatch
-export const useAppDispatch: DispatchFunc = useDispatch
+export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
-
-
-*/
+export const useAppStore: () => AppStore = useStore

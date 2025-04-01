@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { call, put, takeLatest } from 'redux-saga/effects'
+import { AxiosResponse } from 'axios';
 
 //백엔드 에서 보내줄때는 statusCode, data, errMsg ?
 
@@ -26,7 +27,7 @@ export const reducerUtils = {
         errorMsg: '',
     }),
 
-    error: (prevData = null, errorMsg) => ({
+    error: (prevData = null, errorMsg:string) => ({
         data: prevData,
         loading: false,
         error: true,
@@ -43,25 +44,21 @@ const makeAsyncRequestState = (requests) => {
 }
 
 // 비동기 요청의 시작 리듀서
-const asyncReducers = (prefix, asyncRequest) => {
-    const reducers = {}
-
-    asyncRequest.forEach(({ action, state: stateKey }) => {
-        reducers[action] = (state, action) => ({
+const asyncReducers = (asyncRequest) =>
+    asyncRequest.reduce((reducers, { action, state: stateKey }) => ({
+        ...reducers,
+        [action]: (state, action) => ({
             ...state,
             [stateKey]: reducerUtils.loading(state[stateKey]?.data),
-        })
-    })
-
-    return reducers
-}
+        }),
+    }), {});
 
 // 로딩이 시작되면 자동으로 실행, 비동기 처리를 해줌
-const createRequestSaga = (prefix, reducerName, apiRequest) => {
+const createRequestSaga = (prefix:string, reducerName:string, apiRequest) => {
     return function* fetchApiData(action) {
         try {
             // api 호출 시도
-            const response = yield call(() => apiRequest(action.payload))
+            const response: AxiosResponse = yield call(() => apiRequest(action.payload))
 
             //결과에 따른 분기처리
             const result = response.data
@@ -117,7 +114,7 @@ const createRequestSaga = (prefix, reducerName, apiRequest) => {
 }
 
 // 비동기 처리 완료에 따른 상태 반영
-export const extraReducers = (prefix, asyncRequest) => {
+export const extraReducers = (prefix:string, asyncRequest) => {
     return (builder) => {
         builder.addMatcher(
             (action) => action.type.includes(prefix),
@@ -149,7 +146,7 @@ export const extraReducers = (prefix, asyncRequest) => {
 
 // 최종 리덕스 제작기
 export const reduxMaker = (
-    prefix,
+    prefix: string,
     asyncRequest = [],
     localState = {},
     localReducers = {},
@@ -176,7 +173,7 @@ export const reduxMaker = (
                     state[itemName] = allInitialState[itemName]
                 }
             },
-            ...asyncReducers(prefix, asyncRequest),
+            ...asyncReducers(asyncRequest),
             ...localReducers,
         },
         extraReducers: extraReducers(prefix, asyncRequest),

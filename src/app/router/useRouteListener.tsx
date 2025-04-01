@@ -15,6 +15,7 @@ const useRouteListener = () => {
         const originalReplaceState = window.history.replaceState
 
         const handleStateChange = (method, ...args) => {
+            console.log(method, ...args)
             const event = new CustomEvent('locationChange')
             method.apply(window.history, args)
             window.dispatchEvent(event)

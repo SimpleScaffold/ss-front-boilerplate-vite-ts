@@ -5,12 +5,7 @@ const prefix = 'sample'
 
 
 const asyncRequest = [
-    {
-        action: 'getCode',
-        state: 'commonCode',
-        initialState: [],
-        api: () => {},
-    },
+
     {
         action: 'getPokemon',
         state: 'pokemon',
