@@ -1,6 +1,6 @@
 import createSagaMiddleware from 'redux-saga'
-import { configureStore, Tuple } from '@reduxjs/toolkit'
-import { all } from 'redux-saga/effects'
+import {configureStore, Tuple} from '@reduxjs/toolkit'
+import {all} from 'redux-saga/effects'
 import {routerSaga, routerSlice} from "src/app/router/routerReducer.tsx";
 import {sampleSaga, sampleSlice} from "src/features/sample/sampleReducer.ts";
 

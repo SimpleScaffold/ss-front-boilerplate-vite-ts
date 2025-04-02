@@ -50,6 +50,7 @@ export interface AsyncRequest<DataType, PayloadType> {
     action: string;
     state: string;
     initialState: DataType;
+
     api(payload: PayloadType): Promise<AxiosResponse>;
 }
 
@@ -65,19 +66,20 @@ const makeAsyncRequestState = <T>(asyncRequests: {
     }, {} as Record<string, AsyncState<T>>)
 }
 
+
 // 비동기 요청의 시작 리듀서
 const asyncReducers = <DataType, PayloadType>(asyncRequests: AsyncRequest<DataType, PayloadType>[]) =>
     asyncRequests.reduce((reducers, {action, state: stateKey}) => ({
         ...reducers,
-        [action]: (state, action) => ({
+        [action]: (state: RootState) => ({
             ...state,
             [stateKey]: reducerUtils.loading(state[stateKey]?.data),
         }),
     }), {});
 
 // 로딩이 시작되면 자동으로 실행, 비동기 처리를 해줌
-const createRequestSaga = (prefix: string, reducerName, api) => {
-    return function* fetchApiData(action) {
+const createRequestSaga = (prefix: string, reducerName: string, api) => {
+    return function* fetchApiData(action: AnyAction) {
         try {
             // api 호출 시도
             const response: AxiosResponse = yield call(() => api(action.payload))
@@ -142,8 +144,8 @@ export const extraReducers = <DataType, PayloadType>(
 ) => {
     return (builder: ActionReducerMapBuilder<RootState>) => {
         builder.addMatcher(
-            (action: { type: string }) => action.type.includes(prefix),
-            (state: RootState, action) => {
+            (action: AnyAction) => action.type.includes(prefix),
+            (state, action: AnyAction) => {
                 const isSuccess = action.type.endsWith('Success');
                 const isFail = action.type.endsWith('Fail');
                 if (isSuccess || isFail) {
@@ -165,31 +167,32 @@ export const extraReducers = <DataType, PayloadType>(
 };
 
 interface ReduxMakerOutput {
-    [key: string]: Slice | (() => SagaIterator) | Record<string, AnyAction>;
+    [key: string]: Slice | (() => SagaIterator) | Record<string, AnyAction>
 }
+
 // 최종 리덕스 제작기
 export const reduxMaker = (
     prefix: string,
     asyncRequests = [],
     localState = {},
-    localReducers = {},
+    localReducers = {}
 ) => {
-    const final : ReduxMakerOutput= {}
-    const allInitialState = {
-        ...localState ,
-        ...makeAsyncRequestState(asyncRequests) ,
-    }
+    const final: ReduxMakerOutput = {}
+    const allInitialState: RootState = {
+        ...localState,
+        ...makeAsyncRequestState(asyncRequests),
+    };
 
     console.log(allInitialState)
 
     final[`${prefix}Slice`] = createSlice({
         name: prefix,
-        initialState: allInitialState ,
+        initialState: allInitialState,
         reducers: {
             initializeAll: () => {
                 return allInitialState
             },
-            initialize: (state,  action: PayloadAction<string>) => {
+            initialize: (state : typeof allInitialState, action: PayloadAction<string>) => {
                 const itemName = action.payload
                 if (
                     state[itemName] !== undefined &&
@@ -202,11 +205,11 @@ export const reduxMaker = (
             ...localReducers,
         },
         extraReducers: extraReducers(prefix, asyncRequests),
-    })
+    }) as Slice
 
     //사가 만들기 (제너레이터함수 사용)
     final[`${prefix}Saga`] = function* () {
-        for (const {action, api} of asyncRequests) {
+        for (const { action, api } of asyncRequests) {
             yield takeLatest(
                 `${prefix}/${action}`,
                 createRequestSaga(prefix, action, api),
@@ -215,7 +218,8 @@ export const reduxMaker = (
     }
 
     //액션 만들기
-    final[`${prefix}Action`] = final[`${prefix}Slice`].actions
+    final[`${prefix}Action`] = (final[`${prefix}Slice`] as Slice).actions;
+
 
     return final
 }
