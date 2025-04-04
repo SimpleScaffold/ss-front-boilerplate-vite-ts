@@ -15,7 +15,7 @@ TODO LIST
 
 
 
-<img src="https://capsule-render.vercel.app/api?type=waving&height=250&color=gradient&text=ss-react-boilerplate-ts&desc=super%20sexy&fontAlignY=30&descAlignY=55" style="width: 100%;" />
+<img src="https://capsule-render.vercel.app/api?type=waving&height=250&color=gradient&text=ss-react-boilerplate-ts&desc=Super%20Sexy&fontAlignY=30&descAlignY=55" style="width: 100%;" />
 
 
 
