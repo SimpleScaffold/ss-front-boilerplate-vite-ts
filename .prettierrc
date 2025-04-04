@@ -3,6 +3,8 @@
   "tabWidth": 4,
   "semi": false,
   "trailingComma": "all",
+  "arrowParens": "always",
+  "bracketSpacing": true,
   "endOfLine": "auto",
   "plugins": ["prettier-plugin-tailwindcss"]
 }

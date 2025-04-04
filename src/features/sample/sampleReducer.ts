@@ -42,12 +42,8 @@ const localReducers = {
     },
     setValue: (state: typeof localState, action: PayloadAction<number>) => {
         state.value = action.payload
-    }
+    },
 }
 
-export const { sampleSlice, sampleSaga, sampleAction } = reduxMaker(
-    prefix,
-    asyncRequests,
-    localState,
-    localReducers,
-)
+const module = reduxMaker(prefix, asyncRequests, localState, localReducers)
+export const { slice: sampleSlice, actions: sampleAction, saga: sampleSaga } = module
