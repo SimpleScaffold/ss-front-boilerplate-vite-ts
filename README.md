@@ -3,12 +3,37 @@ TODO LIST
 - 스토리북 설정 디테일 하게 보기 > 현재 있는 스토리 폴더 삭제후 컴포넌트 쪽으로 옴겨서 확인
 - 스토리북 탬플릿 자동화 (plop 을통해 파일 생성
   가능) https://velog.io/@jh5717/.stories-%ED%8C%8C%EC%9D%BC-%EC%9E%90%EB%8F%99%EC%9C%BC%EB%A1%9C-%EC%83%9D%EC%84%B1%ED%95%98%EA%B8%B0-plop
-- 예시 컴포넌트 제작
+- 예시 컴포넌트 제작 (spin, 테이블, 동적 넓이 높이 추가 컴포넌트, 디바운스 처리된 인풋, 예시 래이아웃들)
 - 모바일, pc , 테블릿 관련 설정 추가
 - css 예외 처리 (몇몇 페이지만 새로 시작할 경우)
 - 배포 처리 만들기 (도커를 통한 배포 자동화 스토리북으로도 하는 부분이 있으니 확인 필요)
 - 쿠버내티스 배포까지? 는 백앤드 하고 디비 기본적인 설정 마치면 차후에
 - readme 파일 스토리북 첫 페이지에 랜더링 하는 기능
+- 리드미 추가 작성 (목차 만들기, 설명 추가, 기술스택 용도별 분리)
+
+
+
+
+
+<img src="https://capsule-render.vercel.app/api?type=waving&height=250&color=gradient&text=ss-react-boilerplate-ts&desc=super%20sexy&fontAlignY=30&descAlignY=55" style="width: 100%;" />
+
+
+
+## Stack
+
+
+<div align="center">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=HTML5&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/Redux-764ABC?style=flat&logo=Redux&logoColor=white" />
+  <img src="https://img.shields.io/badge/shadcn/ui-000000?style=flat&logo=shadcnui&logoColor=white" />
+  <img src="https://img.shields.io/badge/Yarn4-2C8EBB?style=flat&logo=yarn&logoColor=white" />
+</div>
+
+
+
 
 ------
 
