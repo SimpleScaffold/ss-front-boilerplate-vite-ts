@@ -64,44 +64,31 @@ const makeAsyncRequestState = <T, U>(
 }
 
 
+const getErrorMessage = (status: number, fallbackMessage: string, responseData?: any): string => {
+    const messages: Record<number, string> = {
+        400: '잘못된 요청입니다.',
+        401: '인증 오류 발생: 로그인 해주세요.',
+        403: '접근이 거부되었습니다.',
+        404: '요청한 리소스를 찾을 수 없습니다.',
+        500: '서버 오류가 발생했습니다.',
+        503: '서버가 현재 사용할 수 없습니다.',
+    }
+    return messages[status] || responseData?.message || fallbackMessage
+}
+
+
 const createRequestSaga = <PayloadType, ResponseType>(
     prefix: string,
-    reducerName: string, api: (payload: PayloadType) => Promise<AxiosResponse<ResponseType>>,
+    reducerName: string,
+    api: (payload: PayloadType) => Promise<AxiosResponse<ResponseType>>
 ) => {
     return function* fetchApiData(action: AnyAction) {
         try {
-            // api 호출 시도
-            const response: AxiosResponse = yield call(() => api(action.payload))
+            const response: AxiosResponse<ResponseType> = yield call(api, action.payload)
+            const { status, data } = response
 
-            //결과에 따른 분기처리
-            const result = response.data
-
-            // HTTP 상태 코드별 에러 처리
-            if (response.status >= 400) {
-                let errorMessage = '요청 처리 중 오류가 발생했습니다.'
-                switch (response.status) {
-                    case 400:
-                        errorMessage = '잘못된 요청입니다.'
-                        break
-                    case 401:
-                        errorMessage = '인증 오류 발생: 로그인 해주세요.'
-                        break
-                    case 403:
-                        errorMessage = '접근이 거부되었습니다.'
-                        break
-                    case 404:
-                        errorMessage = '요청한 리소스를 찾을 수 없습니다.'
-                        break
-                    case 500:
-                        errorMessage = '서버 오류가 발생했습니다.'
-                        break
-                    case 503:
-                        errorMessage = '서버가 현재 사용할 수 없습니다.'
-                        break
-                    default:
-                        errorMessage = response.data?.message || errorMessage
-                        break
-                }
+            if (status >= 400) {
+                const errorMessage = getErrorMessage(status, '요청 처리 중 오류가 발생했습니다.', data)
                 yield put({
                     type: `${prefix}/${reducerName}Fail`,
                     payload: errorMessage,
@@ -109,15 +96,13 @@ const createRequestSaga = <PayloadType, ResponseType>(
                 return
             }
 
-            // todo 파일 다운로드 처리 추가 (형태에 따라 + 실패시)
+            // TODO: 파일 다운로드 등의 특수 처리 필요 시 여기서 분기 처리
 
-            // 정상 통신일떄
             yield put({
                 type: `${prefix}/${reducerName}Success`,
-                payload: result,
+                payload: data,
             })
         } catch (error) {
-            //서버 자체의 오류 (ex) 서버가 죽음)
             yield put({
                 type: `${prefix}/${reducerName}Fail`,
                 payload: '서버에 문제가 있습니다. 관리자에게 문의하세요',
