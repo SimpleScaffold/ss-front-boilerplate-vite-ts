@@ -168,7 +168,7 @@ export function reduxMaker<
         }
     } as (() => SagaIterator)
 
-    console.log(saga)
+
 
     return {
         slice,

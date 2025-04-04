@@ -9,8 +9,8 @@ TODO LIST
 - 배포 처리 만들기 (도커를 통한 배포 자동화 스토리북으로도 하는 부분이 있으니 확인 필요)
 - 쿠버내티스 배포까지? 는 백앤드 하고 디비 기본적인 설정 마치면 차후에
 - readme 파일 스토리북 첫 페이지에 랜더링 하는 기능
-- 리드미 추가 작성 (목차 만들기, 설명 추가, 기술스택 용도별 분리)
-
+- 리드미 추가 작성 (stack 로고로 변경, 목차 만들기 + 순서 정리, 설명 추가, 기술스택 용도별 분리, 라우팅 관련[라이브러리, 사용방법, 스토어 연동])
+- rxjs 도입 고임 
 
 
 
@@ -19,13 +19,30 @@ TODO LIST
 
 
 
-## Stack
+## Stack (로고로 변경)
+- 언어
+
+- 프레임워크
+- 빌드도구:   
+<img src="https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white" />
+
+- 스타일링
+- 라우팅
+- 상태관리
+- api통신
+- 테스트
+vitest
+- Code Quality & Linting
+- CI/CD & Deployment
+- Version Control & Collaboration
+- Architecture & Folder Structure
+
+
 
 
 <div align="center">
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=HTML5&logoColor=white" />
   <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white" />
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white" />
   <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=white" />
   <img src="https://img.shields.io/badge/Redux-764ABC?style=flat&logo=Redux&logoColor=white" />
   <img src="https://img.shields.io/badge/shadcn/ui-000000?style=flat&logo=shadcnui&logoColor=white" />
@@ -33,18 +50,24 @@ TODO LIST
 </div>
 
 
+----
 
+# 상태 관리
+
+ㅋㅌㅊㅋㅌㅊㅁㄴㅇㅁㅇㄴ
 
 ------
 
 # 라우팅
+
+
 
 ### 간단한 동적 라우팅 기능 
 - 별도의 추가없이 src/pages/url/ 안에 경로에 맞게 파일 작성시 동적으로 url이 생성이 된다. 
 - [  ] 안에 임의의 명칭을 넣어서 동적 url 형성 가능 
 - feature랑 파일명 구분을 위해 Page를 뒤에 붙이는걸 권장 (Page 는 자동 제거됨)
 
-### 졀도의 정적 라우팅 기능 (가장 메인은 여기에 해당[/]
+### 졀도의 정적 라우팅 기능 (가장 메인은 여기에 해당[/])
 - url 이외에 별도의 라우팅 처리는 src/app/router/router.tsx 안에 router 안에 추가하면 됩니다
 
 ### 예시 
@@ -60,16 +83,10 @@ TODO LIST
 
 ```
 
-## 일반 라우팅
-HomePage 를 포함한 
 
 
 
-----
 
-# 상태 관리
-
-ㅋㅌㅊㅋㅌㅊㅁㄴㅇㅁㅇㄴ
 ------
 
 # 스타일

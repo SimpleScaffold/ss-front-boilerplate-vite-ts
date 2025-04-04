@@ -47,9 +47,6 @@ const useRouteListener = () => {
 
     useLayoutEffect(() => {
 
-        console.log(11111111111)
-
-
         dispatch(routerAction.locationChange(route));
     }, [ route]);
 };
