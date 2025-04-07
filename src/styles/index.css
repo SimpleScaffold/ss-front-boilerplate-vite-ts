@@ -1,8 +1,9 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
-
+@import 'src/shared/components/lib/shadcn/styles/shadcn.css';
 
 @import 'src/styles/variables.css';
 @import 'src/styles/base.css';
+
+
 
 
