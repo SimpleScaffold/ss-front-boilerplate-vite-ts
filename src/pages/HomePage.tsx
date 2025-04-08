@@ -8,7 +8,7 @@ const HomePage = () => {
 
 
     const navigate = useNavigate();
-    return <div className={' h-full '}>
+    return <div className={' h-screen w-screen bg-primary '}>
 
 
                 aaa

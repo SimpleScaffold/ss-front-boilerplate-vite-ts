@@ -1,5 +1,8 @@
 import { useNavigate } from 'react-router'
 import { useEffect, useState } from 'react'
+import { useAppDispatch } from 'src/app/store/redux/reduxHooks.tsx'
+import { sampleAction } from 'src/features/sample/sampleReducer.ts'
+import { toast } from 'react-toastify'
 
 const Sample = () => {
 
@@ -11,8 +14,22 @@ const Sample = () => {
         console.log(cccc)
     }, [cccc])
 
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(sampleAction.initialize('value'))
+
+        return () => {
+            dispatch(sampleAction.initialize('value'))
+
+        }
+    }, [])
+    const notify = () => toast('Wow so easy !');
+
     return (
         <div>
+
+            <button onClick={notify}>Notify !</button>
 
             <button
                 onClick={() => {
