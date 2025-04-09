@@ -1,44 +1,62 @@
-import { createBrowserRouter, RouteObject } from 'react-router'
-import HomePage from 'src/pages/HomePage'
+import {createBrowserRouter, RouteObject} from 'react-router';
+import HomePage from 'src/pages/HomePage';
 import React, { lazy, Suspense } from 'react'
+import LazyPage from 'src/pages/extra/LazyPage.tsx'
+import DelayedRouter from 'src/app/router/routerType/DelayedRouter.tsx'
 
 // NOTE: https://reactrouter.com/start/data/routing
-// TODO: lazy loading 적용 완료
+// TODO: lazy loading 적용해야 할까?
 
-// 동적으로 페이지를 import하는 부분을 lazy로 변경
-const MODULES = import.meta.glob('src/pages/url/**/*.tsx', { eager: false }) as Record<string, () => Promise<{ default: React.FC }>>;
 
-function withMinimumDelay<T>(promise: Promise<T>, delay = 300): Promise<T> {
-    return Promise.all([promise, new Promise((res) => setTimeout(res, delay))]).then(([result]) => result);
-}
 
-const generateRoutes = (modules: Record<string, () => Promise<{ default: React.FC }>>): RouteObject[] => {
+
+const MODULES = import.meta.glob('src/pages/url/**/*.tsx', {eager: true}) as Record<string, { default: React.FC }>;
+
+const generateRoutes = (modules: Record<string, { default: React.FC }>): RouteObject[] => {
     return Object.entries(modules).map(([path, module]) => {
+        // 파일 경로에서 'src/pages/url/' 이후의 경로를 추출
         const routePath = path
-            .replace(/.*src\/pages\/url\//, '')
-            .replace(/\.tsx$/, '')
-            .replace(/Page$/, '')
-            .replace(/\[(.*?)]/g, ':$1')
+            .replace(/.*src\/pages\/url\//, '') // 'src/pages/url/' 부분 제거
+            .replace(/\.tsx$/, '') // 확장자 제거
+            .replace(/Page$/, '') // 'Page' 접미사 제거
+            .replace(/\[(.*?)]/g, ':$1') // [param] -> :param 변환
             .toLowerCase();
 
-        const Component = lazy(() => withMinimumDelay(module(), 300)); // 최소 300ms 딜레이
+        const Component = module.default;
 
         return {
             path: `/${routePath}`,
-            element: (
-                <Suspense fallback={<>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</>}> {/* 혹은 prettier한 Skeleton */}
-                    <Component />
-                </Suspense>
-            ),
+            element: <Component/>,
         };
     });
 };
+
+
+
+
+
+
+
+
+
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <HomePage />,
+        element: <HomePage/>,
     },
+
+
     ...generateRoutes(MODULES),
+
+    {
+        path: '/lazy/lazy',
+        element: (
+            <DelayedRouter fallback={<>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</>}> {/* 혹은 prettier한 Skeleton */}
+                <LazyPage/>
+            </DelayedRouter>
+        ),
+    }
+
 ]);
 
 export default router;
