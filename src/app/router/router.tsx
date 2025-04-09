@@ -1,6 +1,6 @@
-import { createBrowserRouter, RouteObject } from 'react-router';
-import HomePage from 'src/pages/HomePage';
-import React, { Suspense, lazy } from 'react';
+import { createBrowserRouter, RouteObject } from 'react-router'
+import HomePage from 'src/pages/HomePage'
+import React, { lazy, Suspense } from 'react'
 
 // NOTE: https://reactrouter.com/start/data/routing
 // TODO: lazy loading 적용 완료

@@ -9,18 +9,18 @@ import { Button } from 'src/shared/components/lib/shadcn/components/ui/button'
 import { Input } from 'src/shared/components/lib/shadcn/components/ui/input'
 import { Separator } from 'src/shared/components/lib/shadcn/components/ui/separator'
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
 } from 'src/shared/components/lib/shadcn/components/ui/sheet'
 import { Skeleton } from 'src/shared/components/lib/shadcn/components/ui/skeleton'
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
 } from 'src/shared/components/lib/shadcn/components/ui/tooltip'
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"

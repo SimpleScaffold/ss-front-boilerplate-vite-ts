@@ -1,6 +1,5 @@
-import { CaseReducerActions, createSlice, PayloadAction, Slice, SliceCaseReducers } from '@reduxjs/toolkit'
+import { createSlice, Slice, SliceCaseReducers } from '@reduxjs/toolkit'
 import { AxiosResponse } from 'axios'
-import { RootState } from 'src/app/store/redux/reduxStore.tsx'
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { AnyAction, SagaIterator } from 'redux-saga'
 

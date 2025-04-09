@@ -1,5 +1,5 @@
 import { reduxMaker } from 'src/app/store/redux/reduxUtils.ts'
-import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit'
+import { PayloadAction } from '@reduxjs/toolkit'
 
 const prefix = 'router'
 
