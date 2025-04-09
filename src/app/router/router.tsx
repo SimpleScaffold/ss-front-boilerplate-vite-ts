@@ -1,14 +1,14 @@
-import {createBrowserRouter, RouteObject} from 'react-router';
+import { createBrowserRouter, RouteObject } from 'react-router';
 import HomePage from 'src/pages/HomePage';
-import React from "react";
+import React, { Suspense, lazy } from 'react';
 
 // NOTE: https://reactrouter.com/start/data/routing
-// TODO: lazy loading 적용해야 할까?
+// TODO: lazy loading 적용 완료
 
+// 동적으로 페이지를 import하는 부분을 lazy로 변경
+const MODULES = import.meta.glob('src/pages/url/**/*.tsx', { eager: false }) as Record<string, () => Promise<{ default: React.FC }>>;
 
-const MODULES = import.meta.glob('src/pages/url/**/*.tsx', {eager: true}) as Record<string, { default: React.FC }>;
-
-const generateRoutes = (modules: Record<string, { default: React.FC }>): RouteObject[] => {
+const generateRoutes = (modules: Record<string, () => Promise<{ default: React.FC }>>): RouteObject[] => {
     return Object.entries(modules).map(([path, module]) => {
         // 파일 경로에서 'src/pages/url/' 이후의 경로를 추출
         const routePath = path
@@ -18,11 +18,16 @@ const generateRoutes = (modules: Record<string, { default: React.FC }>): RouteOb
             .replace(/\[(.*?)]/g, ':$1') // [param] -> :param 변환
             .toLowerCase();
 
-        const Component = module.default;
+        // lazy loading으로 컴포넌트 동적으로 로드
+        const Component = lazy(module);
 
         return {
             path: `/${routePath}`,
-            element: <Component/>,
+            element: (
+                <Suspense fallback={<div>Loading...</div>}>
+                    <Component />
+                </Suspense>
+            ),
         };
     });
 };
@@ -30,7 +35,7 @@ const generateRoutes = (modules: Record<string, { default: React.FC }>): RouteOb
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <HomePage/>,
+        element: <HomePage />,
     },
     ...generateRoutes(MODULES),
 ]);
