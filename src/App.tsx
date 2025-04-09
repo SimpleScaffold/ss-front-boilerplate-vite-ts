@@ -9,7 +9,11 @@ function App() {
     useRouteListener()
 
     return (
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <ThemeProvider
+            defaultTheme="dark"
+            storageKey="vite-ui-theme"
+        >
+            {/*  storageKey 변경시 index.js 도 변경 필수  */}
             <RouterProvider router={router} />
             <ToastContainer
                 position="top-right"

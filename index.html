@@ -4,34 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
-    <script type="text/javascript">
-      (function() {
-        function getInitialColorMode() {
-          const isClient = typeof window !== 'undefined';
-          if (isClient) {
-            const persistedColorPreference = window.localStorage.getItem('mode');
+    <script>
+      const theme = localStorage.getItem('vite-ui-theme') || 'system';
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-            if (persistedColorPreference) {
-              return persistedColorPreference;
-            }
-
-            const systemPreference = window.matchMedia('(prefers-color-scheme: dark)');
-            if (systemPreference.matches) {
-              return 'true';
-            }
-            return 'false';
-          }
-        }
-        const colorMode = getInitialColorMode();
-        document.documentElement.style.setProperty(
-            'background-color',
-            colorMode === 'false' ? '#FFFFFF' : '#2F2F2F'
-        );
-        document.documentElement.style.setProperty(
-            'color',
-            colorMode === 'false' ? '#000000' : '#e5e5e5'
-        );
-      })();
+      if (theme === 'dark' || (theme === 'system' && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
     </script>
   </head>
   <body>

@@ -1,16 +1,14 @@
-import {createBrowserRouter, RouteObject} from 'react-router';
-import HomePage from 'src/pages/HomePage';
+import { createBrowserRouter, RouteObject } from 'react-router'
+import HomePage from 'src/pages/HomePage'
 import React, { lazy, Suspense } from 'react'
-import LazyPage from 'src/pages/extra/LazyPage.tsx'
-import DelayedRouter from 'src/app/router/routerType/DelayedRouter.tsx'
+import NotFoundPage from 'src/pages/extra/NotFoundPage.tsx'
 
 // NOTE: https://reactrouter.com/start/data/routing
-// TODO: lazy loading 적용해야 할까?
+// TODO: lazy loading 적용해야 할까? > 필요 없을거 같음
 
 
 
-
-const MODULES = import.meta.glob('src/pages/url/**/*.tsx', {eager: true}) as Record<string, { default: React.FC }>;
+const MODULES = import.meta.glob('src/pages/url/**/*.tsx', { eager: true }) as Record<string, { default: React.FC }>
 
 const generateRoutes = (modules: Record<string, { default: React.FC }>): RouteObject[] => {
     return Object.entries(modules).map(([path, module]) => {
@@ -20,43 +18,31 @@ const generateRoutes = (modules: Record<string, { default: React.FC }>): RouteOb
             .replace(/\.tsx$/, '') // 확장자 제거
             .replace(/Page$/, '') // 'Page' 접미사 제거
             .replace(/\[(.*?)]/g, ':$1') // [param] -> :param 변환
-            .toLowerCase();
+            .toLowerCase()
 
-        const Component = module.default;
+        const Component = module.default
 
         return {
             path: `/${routePath}`,
-            element: <Component/>,
-        };
-    });
-};
-
-
-
-
-
-
-
+            element: <Component />,
+        }
+    })
+}
 
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <HomePage/>,
+        element: <HomePage />,
     },
 
 
     ...generateRoutes(MODULES),
-
     {
-        path: '/lazy/lazy',
-        element: (
-            <DelayedRouter fallback={<>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</>}> {/* 혹은 prettier한 Skeleton */}
-                <LazyPage/>
-            </DelayedRouter>
-        ),
-    }
+        path: '*',
+        element: <NotFoundPage />,
+    },
 
-]);
+])
 
-export default router;
+export default router

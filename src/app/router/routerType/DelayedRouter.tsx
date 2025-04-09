@@ -1,46 +1,42 @@
-import React, { useEffect, useState, Suspense } from 'react'
+import React, { useEffect, useState } from 'react';
 
-interface DelayedFallbackProps {
+interface DelayedSuspenseProps {
     children: React.ReactNode;
     fallback: React.ReactNode;
-    delayMs?: number;       // fallback 보이기 시작하는 최소 지연 시간
-    minDurationMs?: number; // fallback을 최소 유지할 시간
+    delay?: number;         // LazyPage 로딩 시간 최소 임계값 (예: 1000ms)
+    minFallback?: number;   // fallback 최소 표시 시간 (예: 500ms)
 }
 
-const DelayedRouter: React.FC<DelayedFallbackProps> = (
-    {
-        children,
-        fallback,
-        delayMs = 300,
-        minDurationMs = 1000,
-    }) => {
-
-    const [showFallback, setShowFallback] = useState(false)
-    const [canRenderChildren, setCanRenderChildren] = useState(false)
+const DelayedRouter: React.FC<DelayedSuspenseProps> = ({
+                                                             children,
+                                                             fallback,
+                                                             delay = 1000,
+                                                             minFallback = 4000
+                                                         }) => {
+    const [showFallback, setShowFallback] = useState(false);
+    const [showChildren, setShowChildren] = useState(false);
 
     useEffect(() => {
         const delayTimer = setTimeout(() => {
-            setShowFallback(true)
-        }, delayMs)
+            setShowFallback(true);
+        }, delay);
 
-        return () => clearTimeout(delayTimer)
-    }, [delayMs])
+        return () => clearTimeout(delayTimer);
+    }, [delay]);
 
     useEffect(() => {
         if (showFallback) {
-            const minTimer = setTimeout(() => {
-                setCanRenderChildren(true)
-            }, minDurationMs)
-
-            return () => clearTimeout(minTimer)
+            const minFallbackTimer = setTimeout(() => {
+                setShowChildren(true);
+            }, minFallback);
+            return () => clearTimeout(minFallbackTimer);
         }
-    }, [showFallback, minDurationMs])
+    }, [showFallback, minFallback]);
 
-    return (
-        <Suspense fallback={null}>
-            {(!showFallback || !canRenderChildren) ? fallback : children}
-        </Suspense>
-    )
-}
+    if (!showFallback) return null;
+    if (!showChildren) return fallback;
 
-export default DelayedRouter
+    return <>{children}</>;
+};
+
+export default DelayedRouter;
