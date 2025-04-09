@@ -1,14 +1,15 @@
-
-
 import react from '@vitejs/plugin-react-swc'
-import path from "path";
+import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig, Plugin } from 'vite'
 import fs from 'fs'
+import { copyFileSync } from 'fs'
+import { resolve } from 'path'
+
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(),  tailwindcss(), fontPreloadPlugin()],
+  plugins: [react(),  tailwindcss(), fontPreloadPlugin(), copyRobotsTxt()],
 
 
   // 포트지정
@@ -58,5 +59,16 @@ function fontPreloadPlugin(): Plugin {
         return html.replace('</head>', preloadLinks.join('\n') + '\n</head>')
       },
     },
+  }
+}
+
+
+// 커스텀 플러그인: 빌드 후 robots.txt 복사
+function copyRobotsTxt() {
+  return {
+    name: 'copy-robots-txt',
+    closeBundle() {
+      copyFileSync(resolve(__dirname, 'robots.txt'), resolve(__dirname, 'dist/robots.txt'))
+    }
   }
 }
