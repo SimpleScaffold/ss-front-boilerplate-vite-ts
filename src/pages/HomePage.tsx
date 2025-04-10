@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router'
 import { useEffect } from 'react'
 import { reapplyThemeVariables, useTheme } from 'src/shared/lib/shadcn/components/ThemeProvider.tsx'
-
 const HomePage = () => {
 
     const { theme , setTheme } = useTheme()
@@ -39,7 +38,7 @@ const HomePage = () => {
                     ...existing,
                     darkVars: {
                         ...(existing.darkVars || {}),
-                        '--background': '#dc0443',
+                        '--background': 'oklch(0.488 0.243 264.376)',
                         '--foreground': '#ffffff',
                     },
                 }

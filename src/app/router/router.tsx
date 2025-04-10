@@ -3,6 +3,7 @@ import HomePage from 'src/pages/HomePage'
 import React, { lazy, Suspense } from 'react'
 import NotFoundPage from 'src/pages/extra/NotFoundPage.tsx'
 
+
 // NOTE: https://reactrouter.com/start/data/routing
 // TODO: lazy loading 적용해야 할까? > 필요 없을거 같음
 
@@ -38,6 +39,9 @@ const router = createBrowserRouter([
 
 
     ...generateRoutes(MODULES),
+
+
+
     {
         path: '*',
         element: <NotFoundPage />,

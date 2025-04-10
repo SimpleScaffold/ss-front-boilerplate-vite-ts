@@ -11,10 +11,8 @@ TODO LIST
 - readme 파일 스토리북 첫 페이지에 랜더링 하는 기능
 - 리드미 추가 작성 (stack 로고로 변경, 목차 만들기 + 순서 정리, 설명 추가, 기술스택 용도별 분리, 라우팅 관련[라이브러리, 사용방법, 스토어 연동])
 - rxjs 도입 고임 
-- robot.txt 추가
-- 새로고침시 깜빡임 이슈 (랜더전 배경 설정하기)
-- 사용자 지정 테마 설정
-
+- 새로고침시 깜빡임 이슈 - 아주 가끔씩 발생함 원인 불명 
+- html 핼맷 도입 고민 < 19 는 그냥 써두 대지만 라우트별 다른 지원을 위해 도입 
 
 
 <img src="https://capsule-render.vercel.app/api?type=waving&height=250&color=gradient&text=ss-react-boilerplate-ts&desc=Super%20Sexy&fontAlignY=30&descAlignY=55" style="width: 100%;" />
@@ -120,6 +118,17 @@ yarn preview
 
 현재는 개발자 모드에서는 FOUT 현상이 있음 
 빌드시 preload 해주기에 문제 없음 > yarn preview 로 확인해 보기 
+
+
+
+----
+
+# 테스트 
+단위 테스트 
+vitest
+
+E2E 테스트 , 통합 테스트  
+Cypress 
 
 ----
 
