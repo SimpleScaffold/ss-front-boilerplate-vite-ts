@@ -4,30 +4,71 @@ import { reapplyThemeVariables, useTheme } from 'src/shared/lib/shadcn/component
 
 const HomePage = () => {
 
-    const { theme  } = useTheme()
+    const { theme , setTheme } = useTheme()
+
+    useEffect(() => {
+
+    }, [])
 
 
     return <div className={'  text-lg font-bold'}>
         <button
 
             onClick={() => {
-                localStorage.setItem(
-                    'vite-ui-theme-vars',
-                    JSON.stringify({
-                        darkVars: {
-                            '--background': '#dc0443',
-                            '--foreground': '#ffffff',
-                        },
-                    }),
-                )
-
-                // 테마 상태는 유지하면서 변수만 부드럽게 다시 적용!
-                reapplyThemeVariables(theme)
-
+                setTheme('light')
             }
 
-        }
-        >asdadsasd
+            }
+        >ssssssssssssss
+        </button>
+
+        <button
+
+            onClick={() => {
+                setTheme('dark')
+            }
+
+            }
+        >cccccccccccc
+        </button>
+        <button
+            onClick={() => {
+                const existing = JSON.parse(localStorage.getItem('vite-ui-theme-vars') || '{}')
+
+                const updated = {
+                    ...existing,
+                    darkVars: {
+                        ...(existing.darkVars || {}),
+                        '--background': '#dc0443',
+                        '--foreground': '#ffffff',
+                    },
+                }
+
+                localStorage.setItem('vite-ui-theme-vars', JSON.stringify(updated))
+                reapplyThemeVariables(theme)
+            }}
+        >
+            Apply Dark Theme Vars
+        </button>
+
+        <button
+            onClick={() => {
+                const existing = JSON.parse(localStorage.getItem('vite-ui-theme-vars') || '{}')
+
+                const updated = {
+                    ...existing,
+                    lightVars: {
+                        ...(existing.lightVars || {}),
+                        '--background': '#89ef62',
+                        '--foreground': '#ffffff',
+                    },
+                }
+
+                localStorage.setItem('vite-ui-theme-vars', JSON.stringify(updated))
+                reapplyThemeVariables(theme)
+            }}
+        >
+            vvvvvvvvvvcccccccccccccccccccccc
         </button>
 
     </div>

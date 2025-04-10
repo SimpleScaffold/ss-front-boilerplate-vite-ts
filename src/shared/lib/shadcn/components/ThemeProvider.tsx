@@ -26,18 +26,6 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
-const lightVars = {
-    "--background": "oklch(1 0 0)",
-    "--foreground": "oklch(0.145 0 0)",
-    "--primary": "oklch(0.205 0 0)",
-}
-
-const darkVars = {
-    "--background": "oklch(0.591 0.239 28.937)",
-    "--foreground": "oklch(0.985 0 0)",
-    "--primary": "oklch(0.922 0 0)",
-}
-
 
 function getCustomVarsFromLocalStorage() {
     try {
@@ -71,13 +59,32 @@ export function ThemeProvider({
         () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
     )
 
+
+    const clearCustomVars = () => {
+        const { lightVars, darkVars } = getCustomVarsFromLocalStorage()
+        const root = document.documentElement
+
+        const allKeys = new Set([
+            ...Object.keys(darkVars || {}),
+            ...Object.keys(lightVars || {}),
+        ])
+
+        allKeys.forEach((key) => {
+            root.style.removeProperty(key)
+        })
+    }
+
+
     // 🧠 테마에 맞는 CSS 변수 적용 함수
     const applyThemeVariables = (theme: "light" | "dark") => {
         const root = document.documentElement
         const { lightVars, darkVars } = getCustomVarsFromLocalStorage()
         const vars = theme === "dark" ? darkVars : lightVars
 
-        // 로컬스토리지에 정의된 변수만 덮어씌움
+        // 💥 먼저 기존 커스텀 변수 제거
+        clearCustomVars()
+
+        // 📌 존재하면 적용, 없으면 :root 값이 자동으로 fallback 됨!
         if (vars && typeof vars === "object") {
             Object.entries(vars).forEach(([key, value]) => {
                 root.style.setProperty(key, value)
@@ -100,21 +107,7 @@ export function ThemeProvider({
         }
     }, [theme])
 
-    // 💬 시스템 테마 변경 감지
-    useEffect(() => {
-        if (theme !== "system") return
 
-        const media = window.matchMedia("(prefers-color-scheme: dark)")
-        const listener = () => {
-            const newTheme = media.matches ? "dark" : "light"
-            document.documentElement.classList.remove("light", "dark")
-            document.documentElement.classList.add(newTheme)
-            applyThemeVariables(newTheme)
-        }
-
-        media.addEventListener("change", listener)
-        return () => media.removeEventListener("change", listener)
-    }, [theme])
 
     const value = {
         theme,
@@ -133,16 +126,26 @@ export function ThemeProvider({
 
 
 export const reapplyThemeVariables = (theme: Theme) => {
-    const root = document.documentElement
     const { lightVars, darkVars } = getCustomVarsFromLocalStorage()
-    const vars = theme === "dark" ? darkVars : lightVars
+    const root = document.documentElement
 
+    const allKeys = new Set([
+        ...Object.keys(darkVars || {}),
+        ...Object.keys(lightVars || {}),
+    ])
+
+    allKeys.forEach((key) => {
+        root.style.removeProperty(key)
+    })
+
+    const vars = theme === "dark" ? darkVars : lightVars
     if (vars && typeof vars === "object") {
         Object.entries(vars).forEach(([key, value]) => {
             root.style.setProperty(key, value)
         })
     }
 }
+
 export const useTheme = () => {
     const context = useContext(ThemeProviderContext)
 
