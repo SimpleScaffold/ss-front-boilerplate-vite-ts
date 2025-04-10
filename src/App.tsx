@@ -2,7 +2,7 @@ import { RouterProvider } from 'react-router'
 import router from 'src/app/router/router.tsx'
 import useRouteListener from 'src/app/router/useRouteListener.tsx'
 import { Bounce, ToastContainer } from 'react-toastify'
-import { ThemeProvider } from 'src/shared/components/lib/shadcn/components/ThemeProvider.tsx'
+import { ThemeProvider } from 'src/shared/lib/shadcn/components/ThemeProvider.tsx'
 
 function App() {
 

@@ -11,7 +11,6 @@ TODO LIST
 - readme 파일 스토리북 첫 페이지에 랜더링 하는 기능
 - 리드미 추가 작성 (stack 로고로 변경, 목차 만들기 + 순서 정리, 설명 추가, 기술스택 용도별 분리, 라우팅 관련[라이브러리, 사용방법, 스토어 연동])
 - rxjs 도입 고임 
-- 폰트 처리 (성능 개선 > 폰트가 여러개일떄, 로컬 폰트 사용여부, 미리 로딩 )
 - robot.txt 추가
 - 새로고침시 깜빡임 이슈 (랜더전 배경 설정하기)
 - 사용자 지정 테마 설정
@@ -52,6 +51,20 @@ vitest
   <img src="https://img.shields.io/badge/Yarn4-2C8EBB?style=flat&logo=yarn&logoColor=white" />
 </div>
 
+
+
+----
+
+# 설치 및 실행 How to Install 
+
+yarn
+
+
+개발자 모드
+yarn dev
+배포 테스트 
+yarn build
+yarn preview
 
 ----
 
@@ -103,6 +116,10 @@ vitest
 > src/assets/fonts 에 폰트 추가 
 > src/styles/typography.css 에 font-face 추가, layout 으로 테일윈드에 적용
 > src/styles/base.pcss 에 기본적으로 사용할곳 지정 
+
+
+현재는 개발자 모드에서는 FOUT 현상이 있음 
+빌드시 preload 해주기에 문제 없음 > yarn preview 로 확인해 보기 
 
 ----
 

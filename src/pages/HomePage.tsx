@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router'
 import { useEffect } from 'react'
-import { useTheme } from 'src/shared/components/lib/shadcn/components/ThemeProvider.tsx'
+import { useTheme } from 'src/shared/lib/shadcn/components/ThemeProvider.tsx'
 
 const HomePage = () => {
 

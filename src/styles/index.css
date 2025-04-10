@@ -2,7 +2,7 @@
 
 @import 'src/styles/typography.pcss';
 
-@import 'src/shared/components/lib/shadcn/styles/shadcn.pcss';
+@import 'src/shared/lib/shadcn/styles/shadcn.pcss';
 
 @import 'src/styles/variables.css';
 @import 'src/styles/base.pcss';

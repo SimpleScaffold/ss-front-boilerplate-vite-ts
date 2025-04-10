@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
 
-import { cn } from 'src/shared/components/lib/shadcn/lib/utils.ts'
+import { cn } from 'src/shared/lib/shadcn/lib/utils.ts'
 
 function ScrollArea({
   className,

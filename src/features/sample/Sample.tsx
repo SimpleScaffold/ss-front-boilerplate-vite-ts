@@ -28,7 +28,11 @@ const Sample = () => {
 
     return (
         <div>
+<div
+    className={'w-50 h-50 bg-accent'}
+>
 
+</div>
             <button onClick={notify}>Notify !</button>
 
             <button
