@@ -6,23 +6,6 @@ import React, {
     useState,
 } from "react"
 
-// 기존 코드 맨 위에 추가
-function getCustomVarsFromLocalStorage() {
-    try {
-        const item = localStorage.getItem("vite-ui-theme-vars")
-        if (!item) return {}
-
-        const parsed = JSON.parse(item)
-        return {
-            lightVars: parsed.lightVars ?? {},
-            darkVars: parsed.darkVars ?? {},
-        }
-    } catch (error) {
-        console.warn("Invalid vite-ui-theme-vars format in localStorage")
-        return {}
-    }
-}
-
 type Theme = "dark" | "light" | "system"
 
 type ThemeProviderProps = {
@@ -51,8 +34,32 @@ const lightVars = {
 
 const darkVars = {
     "--background": "oklch(0.591 0.239 28.937)",
+    "--foreground": "oklch(0.985 0 0)",
     "--primary": "oklch(0.922 0 0)",
 }
+
+
+function getCustomVarsFromLocalStorage() {
+    try {
+        const item = localStorage.getItem("vite-ui-theme-vars")
+        if (!item) return {}
+
+
+        const parsed = JSON.parse(item) as {
+            lightVars?: Record<string, string>
+            darkVars?: Record<string, string>
+        }
+
+        return {
+            lightVars: parsed.lightVars ?? {},
+            darkVars: parsed.darkVars ?? {},
+        }
+    } catch (error) {
+        console.warn("Invalid vite-ui-theme-vars format in localStorage")
+        return {}
+    }
+}
+
 
 export function ThemeProvider({
                                   children,
@@ -124,6 +131,18 @@ export function ThemeProvider({
     )
 }
 
+
+export const reapplyThemeVariables = (theme: Theme) => {
+    const root = document.documentElement
+    const { lightVars, darkVars } = getCustomVarsFromLocalStorage()
+    const vars = theme === "dark" ? darkVars : lightVars
+
+    if (vars && typeof vars === "object") {
+        Object.entries(vars).forEach(([key, value]) => {
+            root.style.setProperty(key, value)
+        })
+    }
+}
 export const useTheme = () => {
     const context = useContext(ThemeProviderContext)
 
