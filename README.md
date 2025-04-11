@@ -58,6 +58,11 @@ vitest
 yarn
 
 
+nvm 추천 > Linux https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating (wsl)
+window > https://github.com/coreybutler/nvm-windows
+yarn 프로젝트별 관리 추천 > https://yarnpkg.com/getting-started/install
+
+
 개발자 모드
 yarn dev
 배포 테스트 
