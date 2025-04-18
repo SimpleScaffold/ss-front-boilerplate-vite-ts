@@ -71,6 +71,47 @@ yarn preview
 
 ----
 
+# 형상관리
+{tag}: [{place}] 내용
+
+
+```
+feat: 기능 추가
+modify: 버그 아닌 코드 수정
+fix: 버그 수정
+refactor: 코드 리팩토링
+style: 코드 스타일(코드 컨벤션 추가) 수정
+docs: 문서 작업
+design: 프론트 CSS 수정
+test: 테스트 코드 작성
+chore: 프로젝트 설정 파일 수정
+create: 프로젝트 생성
+rename: 파일이나 폴더명을 수정하거나 옮기는 작업만 수행
+remove: 파일을 삭제하는 작업만 수행
+출처: https://ravenkim97.tistory.com/478 [Life Log:티스토리]
+
+
+```
+----
+
+
+yarn4 + vite
+
+cra 대비 테스트 결과
+빌드속도 - 476 > 75 초
+
+
+----
+
+폴더 구조 
+FSD 의 장점과 프로젝트의 성향에 맞게 수정
+
+
+
+
+
+----
+
 # 상태 관리
 
 ㅋㅌㅊㅋㅌㅊㅁㄴㅇㅁㅇㄴ
@@ -163,5 +204,12 @@ Cypress
 
 3. Page Ruler: 크롬 화면에서 영역 지정하여 길이 px 확인 가능
     - [설치하기](https://chromewebstore.google.com/detail/page-ruler/jcbmcnpepaddcedmjdcmhbekjhbfnlff?hl=ko)
+
+   
+
+
+
+
+
 
 
