@@ -28,15 +28,8 @@
   </head>
   <body>
     <div id="root"></div>
-    <div id="root2"></div>
     <script type="module">
-      const path = window.location.pathname
-
-      if (path.startsWith('/www') || path.startsWith('/isolated')) {
-        import('/extraSrc/extraMain.js')
-      } else {
-        import('/src/main.tsx')
-      }
+      import('/src/main.tsx')
     </script>
   </body>
 </html>
