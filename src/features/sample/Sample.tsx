@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 
 const Sample = () => {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const [cccc, setCccc] = useState(0)
 
@@ -24,22 +24,22 @@ const Sample = () => {
 
         }
     }, [])
-    const notify = () => toast('Wow so easy !');
+    const notify = () => toast('Wow so easy !')
 
     return (
         <div>
-<div
-    className={'w-50 h-50 bg-accent'}
->
+            <div
+                className={'w-50 h-50 bg-accent'}
+            >
 
-</div>
+            </div>
             <button onClick={notify}>Notify !</button>
 
             <button
                 onClick={() => {
                     navigate('/')
                 }}
-            >씨맙
+            >홈으로
             </button>
 
 
@@ -55,14 +55,14 @@ const Sample = () => {
             {cccc}
             <button
                 onClick={() => {
-                    setCccc((state) => state+1)
+                    setCccc((state) => state + 1)
                 }}
             >bbbbbbbbbbbbbbbbbbbbbbb
             </button>
             sdfsdfd
             sdfsdfd
         </div>
-    );
-};
+    )
+}
 
-export default Sample;
+export default Sample

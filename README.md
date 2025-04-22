@@ -144,7 +144,30 @@ FSD 의 장점과 프로젝트의 성향에 맞게 수정
 ```
 
 
+### 이동 방법
+```
+ const navigate = useNavigate() 
+```
+를 선언해주고 
 
+```
+            <button
+                onClick={() => {
+                    navigate('/')
+                }}
+            >홈으로
+            </button>
+```
+
+다음과 같이 이동 
+
+맨 앞에 / 가 있으면 도메인 다음으로 들어가고
+/가 없으면 현위치 기준으로 들어감 
+
+ex) 
+현재 url: localhost:8619/aaaa
+navigate('/bbbb') >> localhost:8619/bbbb
+navigate('/cccc') >> localhost:8619/aaaa/cccc
 
 
 ------
