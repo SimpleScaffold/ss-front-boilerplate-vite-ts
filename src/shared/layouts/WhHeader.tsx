@@ -1,0 +1,23 @@
+import BlurText from 'src/shared/components/text/SSblurAniText.tsx'
+
+const WhHeader = () => {
+    return (
+        <header
+            className="flex items-center justify-between whitespace-nowrap border-b border-solid  px-10 py-4"
+        >
+            <div className="flex items-center gap-8">
+                <BlurText
+                    text="Euc Work Helper"
+                    delay={150}
+                    animateBy="words"
+                    direction="top"
+                    // onAnimationComplete={}
+                    className="text-2xl"
+                />
+            </div>
+
+        </header>
+    )
+}
+
+export default WhHeader
