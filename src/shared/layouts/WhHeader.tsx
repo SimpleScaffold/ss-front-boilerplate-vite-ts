@@ -1,5 +1,8 @@
 import BlurText from 'src/shared/components/text/SSblurAniText.tsx'
 import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
+import { Button } from 'src/shared/lib/shadcn/components/ui/button.tsx'
+import { Settings } from 'lucide-react'
+import SScolorDrawer from 'src/shared/components/theme/SScolorDrawer.tsx'
 
 const WhHeader = () => {
     return (
@@ -16,9 +19,9 @@ const WhHeader = () => {
                     className="text-2xl"
                 />
             </div>
-            <div className="flex items-center gap-8">
-                <SSdarkmodeSwitch/>
-
+            <div className="flex items-center gap-2">
+                <SSdarkmodeSwitch />
+                <SScolorDrawer/>
             </div>
         </header>
     )

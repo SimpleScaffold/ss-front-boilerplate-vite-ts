@@ -75,7 +75,6 @@ export function ThemeProvider({
     }
 
 
-    // 🧠 테마에 맞는 CSS 변수 적용 함수
     const applyThemeVariables = (theme: "light" | "dark") => {
         const root = document.documentElement
         const { lightVars, darkVars } = getCustomVarsFromLocalStorage()
@@ -94,7 +93,7 @@ export function ThemeProvider({
 
         }
     }
-    // 💡 실제 테마 적용 (class + css vars)
+
     useLayoutEffect(() => {
         const root = document.documentElement
         root.classList.remove("light", "dark")
