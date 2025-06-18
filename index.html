@@ -1,30 +1,37 @@
 <!doctype html>
 <html lang="en">
   <head>
-
     <script>
-      const theme = localStorage.getItem('vite-ui-theme') || 'system';
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-      const isDark = theme === 'dark' || (theme === 'system' && prefersDark);
-      document.documentElement.classList.toggle('dark', isDark);
-
-      // CSS 변수 적용
-      const rawVars = localStorage.getItem('vite-ui-theme-vars');
-      if (rawVars) {
+      (function () {
         try {
-          const vars = JSON.parse(rawVars);
-          for (const [key, value] of Object.entries(vars)) {
-            document.documentElement.style.setProperty(key, value);
+          const theme = localStorage.getItem('vite-ui-theme') || 'system';
+          const raw = localStorage.getItem('vite-ui-theme-vars');
+          const vars = raw ? JSON.parse(raw) : {};
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const isDark = theme === 'dark' || (theme === 'system' && prefersDark);
+
+          const themeVars = isDark ? vars.darkVars : vars.lightVars;
+          const root = document.documentElement;
+
+          root.classList.add(isDark ? 'dark' : 'light');
+
+          if (themeVars && typeof themeVars === 'object') {
+            for (const key in themeVars) {
+              root.style.setProperty(key, themeVars[key]);
+            }
+            if (themeVars['--background']) {
+              root.style.backgroundColor = themeVars['--background'];
+            }
           }
         } catch (e) {
-          console.error("Failed to parse theme vars from localStorage", e);
+          console.warn('Early theme apply failed', e);
         }
-      }
+      })();
     </script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Work Helper</title>
   </head>
   <body>
     <div id="root"></div>

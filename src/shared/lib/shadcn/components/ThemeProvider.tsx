@@ -81,17 +81,19 @@ export function ThemeProvider({
         const { lightVars, darkVars } = getCustomVarsFromLocalStorage()
         const vars = theme === "dark" ? darkVars : lightVars
 
-        // 💥 먼저 기존 커스텀 변수 제거
         clearCustomVars()
 
-        // 📌 존재하면 적용, 없으면 :root 값이 자동으로 fallback 됨!
         if (vars && typeof vars === "object") {
             Object.entries(vars).forEach(([key, value]) => {
                 root.style.setProperty(key, value)
             })
+
+            if (vars["--background"]) {
+                root.style.backgroundColor = vars["--background"]
+            }
+
         }
     }
-
     // 💡 실제 테마 적용 (class + css vars)
     useLayoutEffect(() => {
         const root = document.documentElement
@@ -143,6 +145,10 @@ export const reapplyThemeVariables = (theme: Theme) => {
         Object.entries(vars).forEach(([key, value]) => {
             root.style.setProperty(key, value)
         })
+
+        if (vars["--background"]) {
+            root.style.backgroundColor = vars["--background"]
+        }
     }
 }
 

@@ -1,14 +1,19 @@
 import WhHeader from 'src/shared/layouts/WhHeader.tsx'
-import WhFooter from 'src/shared/layouts/WhFooter.tsx'
 
-const WhLayout = ({
-    children,
-                  }) => {
+import React, { ReactNode } from 'react'
+
+interface WhLayoutProps {
+    children?: ReactNode
+
+}
+
+
+const WhLayout = ({ children }: WhLayoutProps) => {
+
     return (
         <div>
-            <WhHeader />
+            <WhHeader/>
             {children}
-            <WhFooter />
         </div>
     )
 }
