@@ -1,4 +1,5 @@
 import BlurText from 'src/shared/components/text/SSblurAniText.tsx'
+import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
 
 const WhHeader = () => {
     return (
@@ -15,7 +16,10 @@ const WhHeader = () => {
                     className="text-2xl"
                 />
             </div>
+            <div className="flex items-center gap-8">
+                <SSdarkmodeSwitch/>
 
+            </div>
         </header>
     )
 }
