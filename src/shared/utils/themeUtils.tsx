@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 const STORAGE_KEY = 'vite-ui-theme-vars'
+type Theme = "dark" | "light" | "system"
 
 export const getCustomVarsFromLocalStorage = () => {
     try {
@@ -19,7 +20,7 @@ export const getCustomVarsFromLocalStorage = () => {
     }
 }
 
-export const saveThemeVar = (theme: 'light' | 'dark', key: string, value: string) => {
+export const saveThemeVar = (theme: Theme, key: string, value: string) => {
     const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
     const themeKey = `${theme}Vars`
 
@@ -41,12 +42,14 @@ export const applyThemeVariables = (theme: 'light' | 'dark') => {
 
     clearThemeVariables()
 
-    for (const [key, value] of Object.entries(vars)) {
-        root.style.setProperty(key, value)
-    }
+    if (vars && typeof vars === 'object') {
+        Object.entries(vars).forEach(([key, value]) => {
+            root.style.setProperty(key, value)
+        })
 
-    if (vars['--background']) {
-        root.style.backgroundColor = vars['--background']
+        if (vars['--background']) {
+            root.style.backgroundColor = vars['--background']
+        }
     }
 }
 
@@ -64,13 +67,13 @@ export const clearThemeVariables = () => {
     })
 }
 
-export const reapplyThemeVariables = (theme: 'light' | 'dark') => {
+export const reapplyThemeVariables = (theme: Theme) => {
     clearThemeVariables()
     applyThemeVariables(theme)
 }
 
 
-export const useThemeVariable = (key: string, theme: 'light' | 'dark') => {
+export const useThemeVariable = (key: string, theme: Theme) => {
     const [value, setValue] = useState('')
 
     useEffect(() => {
@@ -83,3 +86,26 @@ export const useThemeVariable = (key: string, theme: 'light' | 'dark') => {
 }
 
 
+
+
+type ThemeProviderState = {
+    theme: Theme
+    setTheme: (theme: Theme) => void
+}
+
+const initialState: ThemeProviderState = {
+    theme: "system",
+    setTheme: () => null,
+}
+
+export const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+
+export const useTheme = () => {
+    const context = useContext(ThemeProviderContext)
+
+    if (context === undefined) {
+        throw new Error("useTheme must be used within a ThemeProvider")
+    }
+
+    return context
+}

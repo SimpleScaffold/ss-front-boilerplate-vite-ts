@@ -12,9 +12,8 @@ import {
 import { Button } from 'src/shared/lib/shadcn/components/ui/button.tsx'
 import { ScrollArea } from 'src/shared/lib/shadcn/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/shared/lib/shadcn/components/ui/tabs'
-import { useTheme } from 'src/shared/lib/shadcn/components/ThemeProvider.tsx'
 import ColorPicker from 'src/shared/components/theme/SScolorPicker.tsx'
-import { reapplyThemeVariables, saveThemeVar, useThemeVariable } from 'src/shared/utils/themeUtils.tsx'
+import { reapplyThemeVariables, saveThemeVar, useTheme, useThemeVariable } from 'src/shared/utils/themeUtils.tsx'
 import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
 
 

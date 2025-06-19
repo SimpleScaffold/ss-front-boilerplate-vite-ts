@@ -30,7 +30,6 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
         debouncedOnChange(newColor);
     };
 
-    // Cleanup debounced function on unmount
     useEffect(() => {
         return () => {
             debouncedOnChange.cancel();
