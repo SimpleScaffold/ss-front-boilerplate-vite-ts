@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { parse, formatHex } from 'culori'
+import { formatHex, parse } from 'culori'
 
 const STORAGE_KEY = 'vite-ui-theme-vars'
 
@@ -73,19 +73,15 @@ export const reapplyThemeVariables = (theme: Theme) => {
     applyThemeVariables(theme)
 }
 
-export const oklchToHex = (colorStr: string): string | null => {
+export const oklchToHex = (colorStr: string): string => {
     const parsed = parse(colorStr)
-
-    if (!parsed) return null
-
-    const hex = formatHex(parsed)
-    return hex ?? null
+    if (!parsed) return '#000000'
+    return formatHex(parsed)
 }
 
 
-
 export const useThemeVariable = (key: string, theme: Theme) => {
-    const [value, setValue] = useState('')
+    const [value, setValue] = useState('#000000')
 
     useEffect(() => {
         const { lightVars, darkVars } = getCustomVarsFromLocalStorage()

@@ -7,20 +7,43 @@ import fs, { copyFileSync } from 'fs'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(),  tailwindcss(), fontPreloadPlugin(), copyRobotsTxt()],
+    plugins: [react(), tailwindcss(), fontPreloadPlugin(), copyRobotsTxt()],
 
 
-  // 포트지정
-  server: {
-    port: 6075,
-  },
-
-
-  resolve: {
-    alias: {
-      src: path.resolve(__dirname, 'src'),
+    // 포트지정
+    server: {
+        port: 6075,
     },
-  },
+
+
+    resolve: {
+        alias: {
+            src: path.resolve(__dirname, 'src'),
+        },
+    },
+
+
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'vendor-react': [
+                        'react',
+                        'react-dom',
+                        'scheduler',
+                        'react/jsx-runtime',
+                    ],
+                    'vendor-redux': ['redux', 'react-redux', 'redux-saga'],
+                    'vendor-i18n': ['i18next', 'react-i18next'],
+                    'vendor-motion': ['framer-motion'],
+                    'vendor-icons': ['lucide-react'],
+                }
+            },
+        },
+    },
+
+
+
 })
 
 // 폰트를 자동으로 preload하는 플러그인
@@ -28,11 +51,12 @@ function fontPreloadPlugin(): Plugin {
     return {
         name: 'vite-font-preload',
         transformIndexHtml: {
-            order: 'pre', 
+            order: 'pre',
             handler(html) {
                 const fontDir = path.resolve(__dirname, 'src/assets/fonts')
                 const preloadLinks: string[] = []
                 const usedFonts = getUsedFonts(html)
+
                 function walk(dir: string) {
                     const files = fs.readdirSync(dir)
                     for (const file of files) {
@@ -46,12 +70,13 @@ function fontPreloadPlugin(): Plugin {
                             const fontName = file.split('.')[0]
                             if (usedFonts.includes(fontName)) {
                                 preloadLinks.push(
-                                    `<link rel="preload" href="/assets${publicPath}" as="font" type="${type}" crossorigin>`
+                                    `<link rel="preload" href="/assets${publicPath}" as="font" type="${type}" crossorigin>`,
                                 )
                             }
                         }
                     }
                 }
+
                 walk(fontDir)
                 return html.replace('</head>', preloadLinks.join('\n') + '\n</head>')
             },
@@ -73,10 +98,10 @@ function getUsedFonts(html: string): string[] {
 
 // 커스텀 플러그인: 빌드 후 robots.txt 복사
 function copyRobotsTxt() {
-  return {
-    name: 'copy-robots-txt',
-    closeBundle() {
-      copyFileSync(resolve(__dirname, 'robots.txt'), resolve(__dirname, 'dist/robots.txt'))
+    return {
+        name: 'copy-robots-txt',
+        closeBundle() {
+            copyFileSync(resolve(__dirname, 'robots.txt'), resolve(__dirname, 'dist/robots.txt'))
+        },
     }
-  }
 }

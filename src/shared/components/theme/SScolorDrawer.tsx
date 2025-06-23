@@ -14,8 +14,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/shared/lib/shadcn/
 import ColorPicker from 'src/shared/components/theme/SScolorPicker.tsx'
 import { reapplyThemeVariables, saveThemeVar, useTheme, useThemeVariable } from 'src/shared/utils/themeUtils.tsx'
 import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
-import { useState } from 'react'
-
 
 const SScolorDrawer = () => {
 
