@@ -67,10 +67,8 @@ const SScolorDrawer = () => {
                         <TabsTrigger value="colors">colors</TabsTrigger>
                         <TabsTrigger value="etc">etc</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="colors">
-
+                    <TabsContent   value="colors">
                         <ColorPickers />
-
                     </TabsContent>
                     <TabsContent value="etc">Change your password here.</TabsContent>
                 </Tabs>
@@ -98,6 +96,10 @@ const ColorPickers = () => {
     }
 
     const background = useThemeVariable('--background', theme)
+    const foreground = useThemeVariable('--foreground', theme)
+    const card = useThemeVariable('--card', theme)
+    const cardForeground = useThemeVariable('--card-foreground', theme)
+
 
     return (
         <div>
@@ -107,11 +109,28 @@ const ColorPickers = () => {
                 color={background}
                 onChange={handleChange('--background')}
             />
+            <ColorPicker
+                label="Foreground"
+                color={foreground}
+                onChange={handleChange('--foreground')}
+            />
+            <ColorPicker
+                label="Card"
+                color={card}
+                onChange={handleChange('--card')}
+            />
+
+            <ColorPicker
+                label="CardForeground"
+                color={cardForeground}
+                onChange={handleChange('--card-foreground')}
+            />
+
+
 
         </div>
     )
 }
-
 
 
 

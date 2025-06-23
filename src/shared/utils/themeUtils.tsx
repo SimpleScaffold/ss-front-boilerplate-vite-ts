@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { parse, formatHex } from 'culori'
 
 const STORAGE_KEY = 'vite-ui-theme-vars'
 
@@ -72,6 +73,16 @@ export const reapplyThemeVariables = (theme: Theme) => {
     applyThemeVariables(theme)
 }
 
+export const oklchToHex = (colorStr: string): string | null => {
+    const parsed = parse(colorStr)
+
+    if (!parsed) return null
+
+    const hex = formatHex(parsed)
+    return hex ?? null
+}
+
+
 
 export const useThemeVariable = (key: string, theme: Theme) => {
     const [value, setValue] = useState('')
@@ -79,12 +90,19 @@ export const useThemeVariable = (key: string, theme: Theme) => {
     useEffect(() => {
         const { lightVars, darkVars } = getCustomVarsFromLocalStorage()
         const vars = theme === 'dark' ? darkVars : lightVars
-        setValue(vars?.[key] ?? '')
+        const localStorageValue = vars?.[key]
+
+        if (localStorageValue) {
+            setValue(localStorageValue)
+        } else {
+            const raw = getComputedStyle(document.documentElement).getPropertyValue(key).trim()
+            const hex = oklchToHex(raw)
+            setValue(hex)
+        }
     }, [key, theme])
 
     return value
 }
-
 
 type ThemeProviderState = {
     theme: Theme

@@ -2489,6 +2489,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/culori@npm:^4":
+  version: 4.0.0
+  resolution: "@types/culori@npm:4.0.0"
+  checksum: 10c0/c2ceb21601773f6e5e2ec4e3cb6e86ef0f555f92da5a7042656dc2e08df24232d3d04616927f12501bec7c9bfcf9cc988ae277aa3bd554be680edb0236c8e726
+  languageName: node
+  linkType: hard
+
 "@types/deep-eql@npm:*":
   version: 4.0.2
   resolution: "@types/deep-eql@npm:4.0.2"
@@ -3675,6 +3682,13 @@ __metadata:
   version: 3.1.3
   resolution: "csstype@npm:3.1.3"
   checksum: 10c0/80c089d6f7e0c5b2bd83cf0539ab41474198579584fa10d86d0cafe0642202343cbc119e076a0b1aece191989477081415d66c9fefbf3c957fc2fc4b7009f248
+  languageName: node
+  linkType: hard
+
+"culori@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "culori@npm:4.0.1"
+  checksum: 10c0/4efc4a41151c5c2660913a8276f6d9bc82be63c76a56251d0a975e04196b5fde63e37f2f9e4ecb5a69029c6b34320a3a0f92225dd0ed03a3503dea3e9e2b8999
   languageName: node
   linkType: hard
 
@@ -7006,6 +7020,7 @@ __metadata:
     "@storybook/react-vite": "npm:^8.6.12"
     "@storybook/test": "npm:^8.6.12"
     "@tailwindcss/vite": "npm:^4.0.17"
+    "@types/culori": "npm:^4"
     "@types/node": "npm:^22.13.14"
     "@types/react": "npm:^19.0.10"
     "@types/react-dom": "npm:^19.0.4"
@@ -7016,6 +7031,7 @@ __metadata:
     axios: "npm:^1.8.4"
     class-variance-authority: "npm:^0.7.1"
     clsx: "npm:^2.1.1"
+    culori: "npm:^4.0.1"
     cypress: "npm:^14.3.0"
     eslint: "npm:^9.21.0"
     eslint-plugin-react-hooks: "npm:^5.1.0"
