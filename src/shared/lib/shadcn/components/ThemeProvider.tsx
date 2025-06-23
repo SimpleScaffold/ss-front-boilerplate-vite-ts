@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { applyThemeVariables, ThemeProviderContext } from 'src/shared/utils/themeUtils.tsx'
+import { applyThemeVariables, saveThemeVar, ThemeProviderContext } from 'src/shared/utils/themeUtils.tsx'
 
 type Theme = "dark" | "light" | "system"
 
@@ -19,9 +19,8 @@ export function ThemeProvider({
     )
 
 
-    useLayoutEffect(() => {
 
-        console.log(theme)
+    useLayoutEffect(() => {
 
         const root = document.documentElement
         root.classList.remove("light", "dark")
@@ -33,6 +32,18 @@ export function ThemeProvider({
         } else {
             root.classList.add(theme)
             applyThemeVariables(theme)
+        }
+
+        // 로컬스토리지에 'vite-ui-theme-vars'가 없으면 기본값을 추가
+        const rawVars = localStorage.getItem('vite-ui-theme-vars');
+        const vars = rawVars ? JSON.parse(rawVars) : {};
+        if (!vars.lightVars || Object.keys(vars.lightVars).length === 0) {
+            const defaultLightVars = { '--background': '#ffffff' }; // 기본 lightVars
+            saveThemeVar('light', '--background', defaultLightVars['--background']);
+        }
+        if (!vars.darkVars || Object.keys(vars.darkVars).length === 0) {
+            const defaultDarkVars = { '--background': '#000000' }; // 기본 darkVars
+            saveThemeVar('dark', '--background', defaultDarkVars['--background']);
         }
     }, [theme])
 

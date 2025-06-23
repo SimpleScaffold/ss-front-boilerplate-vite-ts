@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 const STORAGE_KEY = 'vite-ui-theme-vars'
 
-type Theme = "dark" | "light" | "system"
+type Theme = 'dark' | 'light' | 'system'
 
 export const getCustomVarsFromLocalStorage = () => {
     try {
@@ -35,7 +35,6 @@ export const saveThemeVar = (theme: Theme, key: string, value: string) => {
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
 }
-
 export const applyThemeVariables = (theme: Theme) => {
     const root = document.documentElement
     const { lightVars, darkVars } = getCustomVarsFromLocalStorage()
@@ -87,15 +86,13 @@ export const useThemeVariable = (key: string, theme: Theme) => {
 }
 
 
-
-
 type ThemeProviderState = {
     theme: Theme
     setTheme: (theme: Theme) => void
 }
 
 const initialState: ThemeProviderState = {
-    theme: "system",
+    theme: 'system',
     setTheme: () => null,
 }
 
@@ -105,7 +102,7 @@ export const useTheme = () => {
     const context = useContext(ThemeProviderContext)
 
     if (context === undefined) {
-        throw new Error("useTheme must be used within a ThemeProvider")
+        throw new Error('useTheme must be used within a ThemeProvider')
     }
 
     return context

@@ -1,5 +1,5 @@
-import * as React from "react"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
+import * as React from 'react'
+import * as TabsPrimitive from '@radix-ui/react-tabs'
 
 import { cn } from 'src/shared/lib/shadcn/lib/utils.ts'
 

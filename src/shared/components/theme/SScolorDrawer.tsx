@@ -1,23 +1,41 @@
 import { Settings } from 'lucide-react'
 import {
     Drawer,
-    DrawerTrigger,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerDescription,
-    DrawerTitle,
     DrawerClose,
     DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
 } from 'src/shared/lib/shadcn/components/ui/drawer.tsx'
 import { Button } from 'src/shared/lib/shadcn/components/ui/button.tsx'
-import { ScrollArea } from 'src/shared/lib/shadcn/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/shared/lib/shadcn/components/ui/tabs'
 import ColorPicker from 'src/shared/components/theme/SScolorPicker.tsx'
 import { reapplyThemeVariables, saveThemeVar, useTheme, useThemeVariable } from 'src/shared/utils/themeUtils.tsx'
 import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
+import { useEffect, useState } from 'react'
 
 
 const SScolorDrawer = () => {
+
+    const { theme } = useTheme()
+
+    const resetThemeVars = () => {
+        const rawVars = localStorage.getItem('vite-ui-theme-vars')
+        const vars = rawVars ? JSON.parse(rawVars) : {}
+
+        const themeKey = `${theme}Vars` // 'lightVars' 또는 'darkVars'
+
+        if (vars[themeKey]) {
+            delete vars[themeKey]
+            localStorage.setItem('vite-ui-theme-vars', JSON.stringify(vars))
+            const defaultVars = theme === 'light' ? { '--background': '#ffffff' } : { '--background': '#000000' }
+            saveThemeVar(theme, '--background', defaultVars['--background'])
+            reapplyThemeVariables(theme)
+        }
+    }
+
     return (
         <Drawer
             direction={'right'}
@@ -27,15 +45,21 @@ const SScolorDrawer = () => {
                     className="cursor-pointer w-5 h-5"
                 />
             </DrawerTrigger>
+
+
             <DrawerContent
                 className="flex flex-col "
             >
                 <DrawerHeader>
                     <DrawerTitle>Chose Your Own colors</DrawerTitle>
                     <DrawerDescription
-                        className={'border-b pb-4'}
+                        className={'border-b pb-4 flex items-center justify-between'}
                     >
                         <SSdarkmodeSwitch/>
+                        <Button
+                            onClick={resetThemeVars}
+                        >Reset</Button>
+
                     </DrawerDescription>
                 </DrawerHeader>
                 <Tabs defaultValue="colors" className="flex-1 px-4">
@@ -52,9 +76,8 @@ const SScolorDrawer = () => {
                 </Tabs>
 
                 <DrawerFooter>
-                    <Button>Confilm</Button>
                     <DrawerClose asChild>
-                        <Button variant="outline">Cancel</Button>
+                        <Button variant="outline">Close</Button>
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>
@@ -73,6 +96,7 @@ const ColorPickers = () => {
         saveThemeVar(theme, key, value)
         reapplyThemeVariables(theme)
     }
+
     const background = useThemeVariable('--background', theme)
 
     return (
@@ -87,4 +111,7 @@ const ColorPickers = () => {
         </div>
     )
 }
+
+
+
 

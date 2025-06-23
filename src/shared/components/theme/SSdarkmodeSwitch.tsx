@@ -1,6 +1,6 @@
 import { Switch } from 'src/shared/lib/shadcn/components/ui/switch.tsx'
 
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'src/shared/utils/themeUtils.tsx'
 
 

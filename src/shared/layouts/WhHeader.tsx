@@ -1,7 +1,5 @@
 import BlurText from 'src/shared/components/text/SSblurAniText.tsx'
 import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
-import { Button } from 'src/shared/lib/shadcn/components/ui/button.tsx'
-import { Settings } from 'lucide-react'
 import SScolorDrawer from 'src/shared/components/theme/SScolorDrawer.tsx'
 
 const WhHeader = () => {

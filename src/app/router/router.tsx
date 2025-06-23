@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouteObject } from 'react-router'
 import HomePage from 'src/pages/HomePage'
-import React, { lazy, Suspense } from 'react'
+import React from 'react'
 import NotFoundPage from 'src/pages/extra/NotFoundPage.tsx'
 
 
