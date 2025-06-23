@@ -27,21 +27,43 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks: {
+                    // React 관련 모듈
                     'vendor-react': [
                         'react',
                         'react-dom',
                         'scheduler',
                         'react/jsx-runtime',
                     ],
-                    'vendor-redux': ['redux', 'react-redux', 'redux-saga'],
+                    // Redux 관련 모듈
+                    'vendor-redux': [
+                        '@reduxjs/toolkit',
+                        'react-redux',
+                        'redux',
+                        'redux-saga',
+                    ],
+                    // i18n 관련 모듈
                     'vendor-i18n': ['i18next', 'react-i18next'],
+                    // 애니메이션 관련 모듈
                     'vendor-motion': ['framer-motion'],
+                    // 아이콘 관련 모듈
                     'vendor-icons': ['lucide-react'],
-                }
+                    // Radix UI 관련 모듈
+                    'vendor-radix': [
+                        '@radix-ui/react-dialog',
+                        '@radix-ui/react-label',
+                        '@radix-ui/react-scroll-area',
+                        '@radix-ui/react-separator',
+                        '@radix-ui/react-slot',
+                        '@radix-ui/react-switch',
+                        '@radix-ui/react-tabs',
+                        '@radix-ui/react-tooltip',
+                    ],
+                    // 스타일링 관련 모듈
+                    'vendor-tailwind': ['tailwindcss'],
+                },
             },
         },
     },
-
 
 
 })
