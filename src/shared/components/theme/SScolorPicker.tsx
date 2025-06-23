@@ -13,12 +13,10 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [localColor, setLocalColor] = useState(color);
 
-    // Update localColor if the prop changes externally
     useEffect(() => {
         setLocalColor(color);
     }, [color]);
 
-    // Create a stable debounced onChange handler
     const debouncedOnChange = useMemo(
         () => debounce((value: string) => onChange(value), 20),
         [onChange]

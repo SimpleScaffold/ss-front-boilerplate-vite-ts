@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react"
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { applyThemeVariables, ThemeProviderContext } from 'src/shared/utils/themeUtils.tsx'
 
 type Theme = "dark" | "light" | "system"
@@ -18,7 +18,11 @@ export function ThemeProvider({
         () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
     )
 
+
     useLayoutEffect(() => {
+
+        console.log(theme)
+
         const root = document.documentElement
         root.classList.remove("light", "dark")
 
