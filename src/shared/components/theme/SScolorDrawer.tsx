@@ -48,15 +48,14 @@ const SScolorDrawer = () => {
             <DrawerContent
                 className="flex flex-col "
             >
-                <DrawerHeader>
-                    <DrawerTitle>Chose Your Own colors</DrawerTitle>
-                    <DrawerDescription
+                <DrawerHeader
+
+                >
+                    <DrawerTitle
                         className={'border-b pb-4 flex items-center justify-between'}
-                    >
-                        <SSdarkmodeSwitch/>
-                        <Button
-                            onClick={resetThemeVars}
-                        >Reset</Button>
+                    ><p>Chose Your Own colors </p>   <SSdarkmodeSwitch/></DrawerTitle>
+                    <DrawerDescription>
+
 
                     </DrawerDescription>
                 </DrawerHeader>
@@ -72,6 +71,9 @@ const SScolorDrawer = () => {
                 </Tabs>
 
                 <DrawerFooter>
+                    <Button
+                        onClick={resetThemeVars}
+                    >Reset</Button>
                     <DrawerClose asChild>
                         <Button variant="outline">Close</Button>
                     </DrawerClose>
