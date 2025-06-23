@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/shared/lib/shadcn/
 import ColorPicker from 'src/shared/components/theme/SScolorPicker.tsx'
 import { reapplyThemeVariables, saveThemeVar, useTheme, useThemeVariable } from 'src/shared/utils/themeUtils.tsx'
 import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 
 const SScolorDrawer = () => {
@@ -25,7 +25,7 @@ const SScolorDrawer = () => {
         const rawVars = localStorage.getItem('vite-ui-theme-vars')
         const vars = rawVars ? JSON.parse(rawVars) : {}
 
-        const themeKey = `${theme}Vars` // 'lightVars' 또는 'darkVars'
+        const themeKey = `${theme}Vars`
 
         if (vars[themeKey]) {
             delete vars[themeKey]
