@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
 const STORAGE_KEY = 'vite-ui-theme-vars'
+
 type Theme = "dark" | "light" | "system"
 
 export const getCustomVarsFromLocalStorage = () => {
@@ -35,7 +36,7 @@ export const saveThemeVar = (theme: Theme, key: string, value: string) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
 }
 
-export const applyThemeVariables = (theme: 'light' | 'dark') => {
+export const applyThemeVariables = (theme: Theme) => {
     const root = document.documentElement
     const { lightVars, darkVars } = getCustomVarsFromLocalStorage()
     const vars = theme === 'dark' ? darkVars : lightVars

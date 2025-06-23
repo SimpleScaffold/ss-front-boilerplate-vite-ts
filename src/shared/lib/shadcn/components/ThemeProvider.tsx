@@ -25,7 +25,7 @@ export function ThemeProvider({
         if (theme === "system") {
             const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches
             root.classList.add(isDark ? "dark" : "light")
-            applyThemeVariables(isDark ? "dark" : "light")
+            applyThemeVariables(isDark ? 'dark' : 'light')
         } else {
             root.classList.add(theme)
             applyThemeVariables(theme)
