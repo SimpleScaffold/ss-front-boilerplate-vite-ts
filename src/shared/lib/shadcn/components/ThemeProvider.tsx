@@ -1,62 +1,54 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { applyThemeVariables, saveThemeVar, ThemeProviderContext } from 'src/shared/utils/themeUtils.tsx'
+// src/shared/providers/ThemeProvider.tsx
+import { useState, useEffect, ReactNode } from 'react'
+import {
+    applyThemeVariables,
+    setDefaultThemeVars,
+} from 'src/shared/utils/themeUtils'
+import {
+    Theme,
+    ThemeContext,
+    STORAGE_KEY,
+} from './ThemeContext'
 
-type Theme = "dark" | "light" | "system"
 
-type ThemeProviderProps = {
-    children: React.ReactNode
-    defaultTheme?: Theme
-    storageKey?: string
-}
 
-export function ThemeProvider({
+
+
+export const ThemeProvider = ({
                                   children,
-                                  defaultTheme = "system",
-                                  storageKey = "vite-ui-theme",
-                              }: ThemeProviderProps) {
-    const [theme, setTheme] = useState<Theme>(
-        () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-    )
+                                  defaultTheme = 'system',
+                              }: {
+    children: ReactNode
+    defaultTheme?: Theme
+}) => {
 
+    const [theme, setThemeState] = useState<Theme>(() => {
+        const storedTheme = localStorage.getItem(STORAGE_KEY) as Theme | null
+        return storedTheme ?? defaultTheme
+    })
 
-
-    useLayoutEffect(() => {
-
-        const root = document.documentElement
-        root.classList.remove("light", "dark")
-
-        if (theme === "system") {
-            const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-            root.classList.add(isDark ? "dark" : "light")
-            applyThemeVariables(isDark ? 'dark' : 'light')
-        } else {
-            root.classList.add(theme)
-            applyThemeVariables(theme)
-        }
-
-        const rawVars = localStorage.getItem('vite-ui-theme-vars');
-        const vars = rawVars ? JSON.parse(rawVars) : {};
-        if (!vars.lightVars || Object.keys(vars.lightVars).length === 0) {
-            const defaultLightVars = { '--background': '#ffffff' };
-            saveThemeVar('light', '--background', defaultLightVars['--background']);
-        }
-        if (!vars.darkVars || Object.keys(vars.darkVars).length === 0) {
-            const defaultDarkVars = { '--background': '#000000' };
-            saveThemeVar('dark', '--background', defaultDarkVars['--background']);
-        }
-    }, [theme])
-
-    const value = {
-        theme,
-        setTheme: (newTheme: Theme) => {
-            localStorage.setItem(storageKey, newTheme)
-            setTheme(newTheme)
-        },
+    const setTheme = (newTheme: Theme) => {
+        localStorage.setItem(STORAGE_KEY, newTheme)
+        setThemeState(newTheme)
     }
 
+    useEffect(() => {
+        const root = document.documentElement
+        root.classList.remove('light', 'dark')
+
+        const isDark =
+            theme === 'dark' ||
+            (theme === 'system' &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+        root.classList.add(isDark ? 'dark' : 'light')
+        setDefaultThemeVars(isDark ? 'dark' : 'light')
+        applyThemeVariables(isDark ? 'dark' : 'light')
+    }, [theme])
+
     return (
-        <ThemeProviderContext.Provider value={value}>
+        <ThemeContext.Provider value={{ theme, setTheme }}>
             {children}
-        </ThemeProviderContext.Provider>
+        </ThemeContext.Provider>
     )
 }
