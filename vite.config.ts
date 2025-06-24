@@ -58,8 +58,6 @@ export default defineConfig({
                         '@radix-ui/react-tabs',
                         '@radix-ui/react-tooltip',
                     ],
-                    // 스타일링 관련 모듈
-                    'vendor-tailwind': ['tailwindcss'],
                 },
             },
         },
