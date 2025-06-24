@@ -11,9 +11,6 @@ import {
 } from './ThemeContext'
 
 
-
-
-
 export const ThemeProvider = ({
                                   children,
                                   defaultTheme = 'system',
@@ -41,9 +38,11 @@ export const ThemeProvider = ({
             (theme === 'system' &&
                 window.matchMedia('(prefers-color-scheme: dark)').matches)
 
-        root.classList.add(isDark ? 'dark' : 'light')
-        applyThemeVariables(isDark ? 'dark' : 'light')
-        setDefaultThemeVars(isDark ? 'dark' : 'light')
+        const mode = isDark ? 'dark' : 'light'
+
+        root.classList.add(mode)
+        applyThemeVariables(mode)
+        setDefaultThemeVars(mode)
     }, [theme])
 
     return (

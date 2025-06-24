@@ -8,7 +8,6 @@ type Theme = 'dark' | 'light'
 const VARS_KEY = 'vite-ui-theme-vars'
 
 
-
 // 테마 (다크모드 화이트모드) 확인 해주는거
 export const useTheme = () => useContext(ThemeContext)
 
@@ -30,37 +29,33 @@ export const saveThemeVar = (theme: Theme, key: string, value: string) => {
 }
 
 
-
-
 // lightVars, darkVars 를 로컬 스토리지 에서 들고옴
 export const getCustomVarsFromLocalStorage = (): {
     lightVars: Record<string, string>;
     darkVars: Record<string, string>;
 } => {
     try {
-        const raw = localStorage.getItem(VARS_KEY);
+        const raw = localStorage.getItem(VARS_KEY)
         if (!raw) {
-            return { lightVars: {}, darkVars: {} };
+            return { lightVars: {}, darkVars: {} }
         }
-        const parsed = JSON.parse(raw);
+        const parsed = JSON.parse(raw)
         return {
-            lightVars: parsed.lightVars|| {} ,
+            lightVars: parsed.lightVars || {},
             darkVars: parsed.darkVars || {},
-        };
+        }
     } catch {
-        console.warn('Invalid vite-ui-theme-vars format in localStorage');
-        return { lightVars: {}, darkVars: {} };
+        console.warn('Invalid vite-ui-theme-vars format in localStorage')
+        return { lightVars: {}, darkVars: {} }
     }
-};
-
-
+}
 
 
 // 변경된 테마를 적용
 export const applyThemeVariables = (theme: Theme) => {
     const root = document.documentElement
 
-    const { lightVars = {}, darkVars = {} } = getCustomVarsFromLocalStorage();
+    const { lightVars = {}, darkVars = {} } = getCustomVarsFromLocalStorage()
 
 
     const vars = theme === 'dark' ? darkVars : lightVars
@@ -68,8 +63,6 @@ export const applyThemeVariables = (theme: Theme) => {
 
     // 적용전에 기존꺼 삭제 (값 없어서 전에 값 남아 있는거 방지 )
     clearThemeVariables()
-
-
 
 
     // 테마에 해당하는 변수 적용
@@ -115,7 +108,7 @@ export const setDefaultThemeVars = (theme: Theme) => {
         // --background 보장 (적용 하고 값을 등록해야 하기에 여기 위치)
         if (!parsed[key]['--background']) {
             parsed[key]['--background'] = oklchToHex(
-                getComputedStyle(document.documentElement).getPropertyValue('--background')
+                getComputedStyle(document.documentElement).getPropertyValue('--background'),
             )
         }
     }
