@@ -15,9 +15,8 @@ import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
 import ColorPicker from 'src/shared/components/theme/SScolorPicker.tsx'
 import { useEffect, useLayoutEffect, useState } from 'react'
 import {
-    applyThemeVariables, getBackgroundColors,
-    getCustomVarsFromLocalStorage, getFallbackVars,
-    reapplyThemeVariables,
+    applyThemeVariables,
+    getCustomVarsFromLocalStorage,
     saveThemeVar, useTheme,
 } from 'src/shared/utils/themeUtils.tsx'
 
@@ -70,7 +69,7 @@ const SScolorDrawer = () => {
                                 ? 'dark'
                                 : 'light'
                             localStorage.removeItem('vite-ui-theme-vars')
-                            reapplyThemeVariables(theme)
+                            applyThemeVariables(theme)
                         }}
                     >   Reset
                     </Button>
@@ -89,7 +88,6 @@ export default SScolorDrawer
 const ColorPickers = () => {
 
     useLayoutEffect(() => {
-        getBackgroundColors()
     }, []);
 
     const { theme } = useTheme();

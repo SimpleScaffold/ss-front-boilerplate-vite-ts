@@ -1,5 +1,5 @@
 // src/shared/providers/ThemeProvider.tsx
-import { useState, useEffect, ReactNode } from 'react'
+import { useState, useEffect, ReactNode, useLayoutEffect } from 'react'
 import {
     applyThemeVariables,
     setDefaultThemeVars,
@@ -32,7 +32,7 @@ export const ThemeProvider = ({
         setThemeState(newTheme)
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const root = document.documentElement
         root.classList.remove('light', 'dark')
 
@@ -42,8 +42,8 @@ export const ThemeProvider = ({
                 window.matchMedia('(prefers-color-scheme: dark)').matches)
 
         root.classList.add(isDark ? 'dark' : 'light')
-        setDefaultThemeVars(isDark ? 'dark' : 'light')
         applyThemeVariables(isDark ? 'dark' : 'light')
+        setDefaultThemeVars(isDark ? 'dark' : 'light')
     }, [theme])
 
     return (
