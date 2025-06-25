@@ -63,13 +63,12 @@ export const applyThemeVariables = (theme: Theme) => {
 
     // 적용전에 기존꺼 삭제 (값 없어서 전에 값 남아 있는거 방지 )
     clearThemeVariables()
-
-
+    
     // 테마에 해당하는 변수 적용
     Object.entries(vars).forEach(([key, value]) => {
         root.style.setProperty(key, value)
     })
-    
+
 
 }
 
