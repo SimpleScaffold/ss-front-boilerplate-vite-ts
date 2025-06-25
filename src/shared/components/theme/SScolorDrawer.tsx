@@ -19,6 +19,7 @@ import {
     getCustomVarsFromLocalStorage,
     saveThemeVar, useTheme,
 } from 'src/shared/utils/themeUtils.tsx'
+import { oklchToHex } from 'src/shared/utils/color.tsx'
 
 const SScolorDrawer = () => {
 
@@ -86,18 +87,31 @@ export default SScolorDrawer
 
 
 const ColorPickers = () => {
-
-    useLayoutEffect(() => {
-    }, []);
-
     const { theme } = useTheme();
+    const vars = getCustomVarsFromLocalStorage()[`${theme}Vars`] || {};
+
+    const getColor = (key: string) =>
+        vars[key] ||
+        oklchToHex(getComputedStyle(document.documentElement).getPropertyValue(key));
+
+    const handleColorChange = (key: string) => (color: string) => {
+        saveThemeVar(theme, key, color);
+        applyThemeVariables(theme);
+    };
 
     return (
         <div className="space-y-4 mt-4">
-
-
+            <ColorPicker
+                color={getColor('--background')}
+                label="Background Color"
+                onChange={handleColorChange('--background')}
+            />
+            <ColorPicker
+                color={getColor('--foreground')}
+                label="Text Color"
+                onChange={handleColorChange('--foreground')}
+            />
         </div>
-    )
-}
-
+    );
+};
 
