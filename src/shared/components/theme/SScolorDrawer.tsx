@@ -95,8 +95,8 @@ const ColorPickers = () => {
     )
 
 
-    const [background, setBackground] = useState('')
-    const [foreground, setForeground] = useState('')
+    const [background, setBackground] = useState(getColor('--background'))
+    const [foreground, setForeground] = useState(getColor('--foreground'))
 
 
     // 최초 마운트 시 한 번만 실행
@@ -108,13 +108,11 @@ const ColorPickers = () => {
     }, [theme, getColor])
 
 
-    const handleColorChange = useCallback(
-        (key: string) => (color: string) => {
-            saveThemeVar(theme, key, color)
-            applyThemeVariables(theme)
-        },
-        [theme],
-    )
+
+    const handleColorChange = (key: string) => (color: string) => {
+        saveThemeVar(theme, key, color);
+        applyThemeVariables(theme);
+    };
 
 
     return (
