@@ -120,4 +120,26 @@ export const setDefaultThemeVars = (theme: Theme) => {
 
 
 
+// 특정 테마를 리셋함
+export const handleReset = (theme: Theme)  => {
 
+    const raw = localStorage.getItem('vite-ui-theme-vars');
+    const parsed = raw ? JSON.parse(raw) : {};
+    const themeKey = `${theme}Vars`;
+
+    // 1. 현재 테마 변수 제거
+    delete parsed[themeKey];
+
+    // 2. --background 값만 복구
+    const background = oklchToHex(
+        getComputedStyle(document.documentElement).getPropertyValue('--background')
+    );
+
+    parsed[themeKey] = {
+        '--background': background,
+    };
+
+    // 3. 저장 및 적용
+    localStorage.setItem('vite-ui-theme-vars', JSON.stringify(parsed));
+    applyThemeVariables(theme);
+};

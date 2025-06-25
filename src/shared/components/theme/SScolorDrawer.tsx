@@ -13,18 +13,17 @@ import { Button } from 'src/shared/lib/shadcn/components/ui/button.tsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/shared/lib/shadcn/components/ui/tabs'
 import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
 import ColorPicker from 'src/shared/components/theme/SScolorPicker.tsx'
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import {
     applyThemeVariables,
-    getCustomVarsFromLocalStorage,
-    saveThemeVar, useTheme,
+    getCustomVarsFromLocalStorage, handleReset,
+    saveThemeVar, setDefaultThemeVars, useTheme,
 } from 'src/shared/utils/themeUtils.tsx'
 import { oklchToHex } from 'src/shared/utils/color.tsx'
 
 const SScolorDrawer = () => {
 
     const { theme } = useTheme()
-
 
 
     return (
@@ -46,7 +45,7 @@ const SScolorDrawer = () => {
                 >
                     <DrawerTitle
                         className={'border-b pb-4 flex items-center justify-between'}
-                    ><p>Chose Your Own colors </p>   <SSdarkmodeSwitch/></DrawerTitle>
+                    ><p>Chose Your Own colors </p>   <SSdarkmodeSwitch /></DrawerTitle>
                     <DrawerDescription>
 
 
@@ -57,7 +56,7 @@ const SScolorDrawer = () => {
                         <TabsTrigger value="colors">colors</TabsTrigger>
                         <TabsTrigger value="etc">etc</TabsTrigger>
                     </TabsList>
-                    <TabsContent   value="colors">
+                    <TabsContent value="colors">
                         <ColorPickers />
                     </TabsContent>
                     <TabsContent value="etc">Change your password here.</TabsContent>
@@ -65,14 +64,8 @@ const SScolorDrawer = () => {
 
                 <DrawerFooter>
                     <Button
-                        onClick={() => {
-                            const theme = document.documentElement.classList.contains('dark')
-                                ? 'dark'
-                                : 'light'
-                            localStorage.removeItem('vite-ui-theme-vars')
-                            applyThemeVariables(theme)
-                        }}
-                    >   Reset
+                        onClick={() => handleReset(theme)}
+                    > Reset
                     </Button>
                     <DrawerClose asChild>
                         <Button variant="outline">Close</Button>
@@ -87,31 +80,56 @@ export default SScolorDrawer
 
 
 const ColorPickers = () => {
-    const { theme } = useTheme();
-    const vars = getCustomVarsFromLocalStorage()[`${theme}Vars`] || {};
+    const { theme } = useTheme()
 
-    const getColor = (key: string) =>
-        vars[key] ||
-        oklchToHex(getComputedStyle(document.documentElement).getPropertyValue(key));
+    const vars = useMemo(
+        () => getCustomVarsFromLocalStorage()[`${theme}Vars`] || {},
+        [theme],
+    )
 
-    const handleColorChange = (key: string) => (color: string) => {
-        saveThemeVar(theme, key, color);
-        applyThemeVariables(theme);
-    };
+    const getColor = useCallback(
+        (key: string) =>
+            vars[key] ||
+            oklchToHex(getComputedStyle(document.documentElement).getPropertyValue(key)),
+        [vars],
+    )
+
+
+    const [background, setBackground] = useState('')
+    const [foreground, setForeground] = useState('')
+
+
+    // 최초 마운트 시 한 번만 실행
+    useEffect(() => {
+        setDefaultThemeVars(theme)
+        applyThemeVariables(theme)
+        setBackground(getColor('--background'))
+        setForeground(getColor('--foreground'))
+    }, [theme, getColor])
+
+
+    const handleColorChange = useCallback(
+        (key: string) => (color: string) => {
+            saveThemeVar(theme, key, color)
+            applyThemeVariables(theme)
+        },
+        [theme],
+    )
+
 
     return (
         <div className="space-y-4 mt-4">
             <ColorPicker
-                color={getColor('--background')}
+                color={background}
                 label="Background Color"
                 onChange={handleColorChange('--background')}
             />
             <ColorPicker
-                color={getColor('--foreground')}
-                label="Text Color"
+                color={foreground}
+                label="Foreground Color"
                 onChange={handleColorChange('--foreground')}
             />
         </div>
-    );
-};
+    )
+}
 

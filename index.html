@@ -13,15 +13,14 @@
           const themeVars = isDark ? vars.darkVars : vars.lightVars;
           const root = document.documentElement;
 
-          if (themeVars && themeVars['--background']) {
-            root.style.setProperty('--background', themeVars['--background']);
-          }
-
           root.classList.add(isDark ? 'dark' : 'light');
 
           if (themeVars && typeof themeVars === 'object') {
             for (const key in themeVars) {
               root.style.setProperty(key, themeVars[key]);
+            }
+            if (themeVars['--background']) {
+              root.style.backgroundColor = themeVars['--background'];
             }
           }
         } catch (e) {
@@ -29,7 +28,6 @@
         }
       })();
     </script>
-
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

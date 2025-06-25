@@ -18,7 +18,7 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
     }, [color]);
 
     const debouncedOnChange = useMemo(
-        () => debounce((value: string) => onChange(value), 20),
+        () => debounce((value: string) => onChange(value), 30),
         [onChange]
     );
 
