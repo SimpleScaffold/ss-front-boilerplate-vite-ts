@@ -7,9 +7,7 @@ const SSdarkmodeSwitch = () => {
     const { theme, setTheme } = useTheme()
 
     const isDark =
-        theme === 'dark' ||
-        (theme === 'system' &&
-            window.matchMedia('(prefers-color-scheme: dark)').matches)
+        theme === 'dark'
 
     const handleToggle = () => {
         setTheme(isDark ? 'light' : 'dark')

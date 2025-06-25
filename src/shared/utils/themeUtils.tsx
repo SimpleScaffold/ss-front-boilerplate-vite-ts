@@ -69,12 +69,7 @@ export const applyThemeVariables = (theme: Theme) => {
     Object.entries(vars).forEach(([key, value]) => {
         root.style.setProperty(key, value)
     })
-
-    // 이건 index.html 에서만 접근 가능해서 추가 필요
-    if (vars['--background']) {
-        root.style.backgroundColor = vars['--background']
-    }
-
+    
 
 }
 

@@ -12,9 +12,7 @@ function App() {
 
 
     return (
-        <ThemeProvider
-            defaultTheme="system"
-        >
+        <ThemeProvider>
             {/*  storageKey 변경시 index.js 도 변경 필수  */}
             <RouterProvider router={router} />
             <ToastContainer

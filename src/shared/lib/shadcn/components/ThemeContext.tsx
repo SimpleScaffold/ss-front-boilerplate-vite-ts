@@ -1,7 +1,7 @@
 // src/shared/providers/ThemeContext.ts
 import { createContext } from 'react'
 
-export type Theme = 'dark' | 'light' | 'system'
+export type Theme = 'light' | 'dark'
 
 export const STORAGE_KEY = 'vite-ui-theme'
 
@@ -11,9 +11,8 @@ export type ThemeContextType = {
 }
 
 export const initialState: ThemeContextType = {
-    theme: 'system',
+    theme: 'dark',
     setTheme: () => null,
 }
 
 export const ThemeContext = createContext<ThemeContextType>(initialState)
-
