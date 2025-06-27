@@ -4,11 +4,8 @@ import {
     applyThemeVariables,
     setDefaultThemeVars,
 } from 'src/shared/utils/themeUtils'
-import {
-    Theme,
-    ThemeContext,
-    STORAGE_KEY,
-} from './ThemeContext'
+import { STORAGE_KEY, Theme, ThemeContext } from 'src/shared/lib/shadcn/components/ThemeContext.tsx'
+
 
 export const ThemeProvider = ({
                                   children,
@@ -17,39 +14,38 @@ export const ThemeProvider = ({
     children: ReactNode
     defaultTheme?: Theme
 }) => {
-    const resolveInitialTheme = (): 'light' | 'dark' => {
-        const storedTheme = localStorage.getItem(STORAGE_KEY) as Theme | null
 
-        if (storedTheme === 'light' || storedTheme === 'dark') {
-            return storedTheme
-        }
 
+    const getInitialTheme = (): Theme => {
+        // 1순위 - 스토리지에 값이 있으면 그것을 반환
+        const stored = localStorage.getItem(STORAGE_KEY) as Theme
+        if (stored === 'dark' || stored === 'light') return stored
+
+        // 2순위 - 개발자가 지정해준 defaultTheme 을 반환
         if (defaultTheme === 'dark' || defaultTheme === 'light') {
             return defaultTheme
         }
 
-        // defaultTheme === 'system' 인 경우 시스템 테마 감지
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        const systemTheme = prefersDark ? 'dark' : 'light'
-        localStorage.setItem(STORAGE_KEY, systemTheme)
-        return systemTheme
+        // 3순위 - defaultTheme이 없으면 시스템 테마를 반환
+        return window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
     }
 
-    const [theme, setThemeState] = useState<'light' | 'dark'>(resolveInitialTheme)
+
+    const [theme, setThemeState] = useState<Theme>(getInitialTheme)
 
     const setTheme = (newTheme: 'light' | 'dark') => {
         localStorage.setItem(STORAGE_KEY, newTheme)
         setThemeState(newTheme)
     }
 
-
-
     useLayoutEffect(() => {
         const root = document.documentElement
         root.classList.remove('light', 'dark')
         root.classList.add(theme)
-        applyThemeVariables(theme)
-        setDefaultThemeVars(theme)
+        // applyThemeVariables(theme)
+        // setDefaultThemeVars(theme)
     }, [theme])
 
     return (

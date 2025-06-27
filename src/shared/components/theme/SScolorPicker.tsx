@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { Label } from 'src/shared/lib/shadcn/components/ui/label.tsx'
 import { debounce } from 'src/shared/utils/debounce.tsx'
 
@@ -22,7 +22,7 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
         [onChange]
     );
 
-    const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleColorChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newColor = e.target.value;
         setLocalColor(newColor);
         debouncedOnChange(newColor);

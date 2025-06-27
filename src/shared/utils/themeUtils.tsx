@@ -1,15 +1,32 @@
 // src/shared/utils/themeUtils.tsx
 import { useContext } from 'react'
-import { ThemeContext } from 'src/shared/lib/shadcn/components/ThemeContext.tsx'
+import { Theme, ThemeContext } from 'src/shared/lib/shadcn/components/ThemeContext.tsx'
 import { oklchToHex } from 'src/shared/utils/color.tsx'
 
-type Theme = 'dark' | 'light'
 
 const VARS_KEY = 'vite-ui-theme-vars'
 
 
-// 테마 (다크모드 화이트모드) 확인 해주는거
-export const useTheme = () => useContext(ThemeContext)
+// 테마 확인, 테마 수정, 다크모드 여부 Hook
+export const useTheme = () => {
+    const context = useContext(ThemeContext)
+    if (!context) {
+        throw new Error('useTheme must be used within a ThemeProvider')
+    }
+    const { theme, setTheme } = context
+    const isDarkTheme = theme === 'dark'
+    return {
+        theme,
+        setTheme,
+        isDarkTheme,
+    }
+}
+
+
+
+
+
+
 
 
 export const saveThemeVar = (theme: Theme, key: string, value: string) => {
@@ -53,38 +70,42 @@ export const getCustomVarsFromLocalStorage = (): {
 
 // 변경된 테마를 적용
 export const applyThemeVariables = (theme: Theme) => {
-    const root = document.documentElement
+    const root = document.documentElement;
 
-    const { lightVars = {}, darkVars = {} } = getCustomVarsFromLocalStorage()
+    const { lightVars = {}, darkVars = {} } = getCustomVarsFromLocalStorage();
+    const vars = theme === 'dark' ? darkVars : lightVars;
 
+    // 적용 전에 기존 변수 제거
+    clearThemeVariables();
 
-    const vars = theme === 'dark' ? darkVars : lightVars
+    // localStorage에 해당 테마 정보가 없으면 CSS 기본값 그대로 유지
+    if (!vars || Object.keys(vars).length === 0) {
+        console.log(`[Theme] No custom vars found for ${theme}, using CSS default`);
+        return;
+    }
 
-
-    // 적용전에 기존꺼 삭제 (값 없어서 전에 값 남아 있는거 방지 )
-    clearThemeVariables()
-
-    // 테마에 해당하는 변수 적용
+    // localStorage에 있는 변수만 적용
     Object.entries(vars).forEach(([key, value]) => {
-        root.style.setProperty(key, value)
-    })
-
-
-}
+        root.style.setProperty(key, value);
+    });
+};
 
 // 현재 css 청소
 export const clearThemeVariables = () => {
-    const root = document.documentElement
-    const { lightVars, darkVars } = getCustomVarsFromLocalStorage()
+    const root = document.documentElement;
+    const { lightVars, darkVars } = getCustomVarsFromLocalStorage();
 
     const allKeys = new Set([
-        ...Object.keys(lightVars),
-        ...Object.keys(darkVars),
-    ])
+        ...Object.keys(lightVars || {}),
+        ...Object.keys(darkVars || {}),
+    ]);
 
     allKeys.forEach((key) => {
-        root.style.removeProperty(key)
-    })
+        root.style.removeProperty(key);
+
+        // 강제로 비우기
+        root.style.setProperty(key, '');
+    });
 }
 
 
@@ -122,24 +143,17 @@ export const setDefaultThemeVars = (theme: Theme) => {
 
 // 특정 테마를 리셋함
 export const handleReset = (theme: Theme)  => {
-
-    const raw = localStorage.getItem('vite-ui-theme-vars');
+    const raw = localStorage.getItem(VARS_KEY);
     const parsed = raw ? JSON.parse(raw) : {};
     const themeKey = `${theme}Vars`;
 
-    // 1. 현재 테마 변수 제거
+    // 1. 해당 테마 변수 제거
     delete parsed[themeKey];
+    localStorage.setItem(VARS_KEY, JSON.stringify(parsed));
 
-    // 2. --background 값만 복구
-    const background = oklchToHex(
-        getComputedStyle(document.documentElement).getPropertyValue('--background')
-    );
+    // 2. 적용된 커스텀 변수 제거
+    clearThemeVariables();
 
-    parsed[themeKey] = {
-        '--background': background,
-    };
-
-    // 3. 저장 및 적용
-    localStorage.setItem('vite-ui-theme-vars', JSON.stringify(parsed));
+    // 3. 기본 CSS 변수 사용 (JS 적용은 안 함)
     applyThemeVariables(theme);
 };
