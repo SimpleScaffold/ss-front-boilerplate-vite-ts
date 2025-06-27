@@ -17,7 +17,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'reac
 import {
     applyThemeVariables,
     getCustomVarsFromLocalStorage, handleReset,
-    saveThemeVar, setDefaultThemeVars, useTheme,
+    saveThemeVar, useTheme,
 } from 'src/shared/utils/themeUtils.tsx'
 import { oklchToHex } from 'src/shared/utils/color.tsx'
 import { ScrollArea } from 'src/shared/lib/shadcn/components/ui/scroll-area.tsx'

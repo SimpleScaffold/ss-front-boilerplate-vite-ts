@@ -2,7 +2,6 @@
 import { useState, useLayoutEffect, ReactNode, useEffect } from 'react'
 import {
     applyThemeVariables,
-    setDefaultThemeVars,
 } from 'src/shared/utils/themeUtils'
 import { STORAGE_KEY, Theme, ThemeContext } from 'src/shared/lib/shadcn/components/ThemeContext.tsx'
 
@@ -44,7 +43,7 @@ export const ThemeProvider = ({
         const root = document.documentElement
         root.classList.remove('light', 'dark')
         root.classList.add(theme)
-        // applyThemeVariables(theme)
+        applyThemeVariables(theme)
         // setDefaultThemeVars(theme)
     }, [theme])
 

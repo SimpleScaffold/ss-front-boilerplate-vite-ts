@@ -73,7 +73,7 @@ export const applyThemeVariables = (theme: Theme) => {
     const { lightVars = {}, darkVars = {} } = getCustomVarsFromLocalStorage();
     const vars = theme === 'dark' ? darkVars : lightVars;
 
-    // 적용 전에 기존 변수 제거
+    // 적용 전에 변수에 값 있는 색 비우기
     clearThemeVariables();
 
     // localStorage에 해당 테마 정보가 없으면 CSS 기본값 그대로 유지
@@ -81,7 +81,6 @@ export const applyThemeVariables = (theme: Theme) => {
         console.log(`[Theme] No custom vars found for ${theme}, using CSS default`);
         return;
     }
-
     // localStorage에 있는 변수만 적용
     Object.entries(vars).forEach(([key, value]) => {
         root.style.setProperty(key, value);
@@ -99,10 +98,10 @@ export const clearThemeVariables = () => {
     ]);
 
     allKeys.forEach((key) => {
-        root.style.removeProperty(key);
+        console.log(key);
+        console.log(key);
 
-        // 강제로 비우기
-        root.style.setProperty(key, '');
+        root.style.removeProperty(key);
     });
 }
 
@@ -140,18 +139,24 @@ export const setDefaultThemeVars = (theme: Theme) => {
 
 
 // 특정 테마를 리셋함
-export const handleReset = (theme: Theme)  => {
+export const handleReset = (theme: Theme) => {
     const raw = localStorage.getItem(VARS_KEY);
-    const parsed = raw ? JSON.parse(raw) : {};
+    if (!raw) return;
+
+    const parsed = JSON.parse(raw);
     const themeKey = `${theme}Vars`;
 
-    // 1. 해당 테마 변수 제거
+    const allKeys = new Set(Object.keys(parsed[themeKey] || {}));
+
     delete parsed[themeKey];
     localStorage.setItem(VARS_KEY, JSON.stringify(parsed));
 
-    // 2. 적용된 커스텀 변수 제거
-    clearThemeVariables();
-
-    // 3. 기본 CSS 변수 사용 (JS 적용은 안 함)
-    applyThemeVariables(theme);
+    const currentTheme = localStorage.getItem('vite-ui-theme');
+    if (currentTheme === theme) {
+        const root = document.documentElement;
+        allKeys.forEach((key) => {
+            root.style.removeProperty(key);
+        });
+        applyThemeVariables(theme);
+    }
 };
