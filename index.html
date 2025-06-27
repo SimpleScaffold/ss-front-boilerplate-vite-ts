@@ -1,42 +1,34 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <script>
-      (function () {
-        try {
-          const theme = localStorage.getItem('vite-ui-theme') || 'system';
-          const raw = localStorage.getItem('vite-ui-theme-vars');
-          const vars = raw ? JSON.parse(raw) : {};
-          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          const isDark = theme === 'dark' || (theme === 'system' && prefersDark);
 
-          const themeVars = isDark ? vars.darkVars : vars.lightVars;
-          const root = document.documentElement;
+        (() => {
+            try {
+                const theme = localStorage.getItem('vite-ui-theme') || 'system'
+                const vars = JSON.parse(localStorage.getItem('vite-ui-theme-vars') || '{}')
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+                const isDark = theme === 'dark' || (theme === 'system' && prefersDark)
 
-          root.classList.add(isDark ? 'dark' : 'light');
+                const root = document.documentElement
+                root.classList.add(isDark ? 'dark' : 'light')
 
-          if (themeVars && typeof themeVars === 'object') {
-            for (const key in themeVars) {
-              root.style.setProperty(key, themeVars[key]);
+                const bg = (isDark ? vars.darkVars : vars.lightVars)?.['--background']
+                root.style.backgroundColor = bg || (isDark ? 'oklch(0.145 0 0)' : '');
+            } catch (e) {
+                console.warn('Early theme apply failed', e)
             }
-            if (themeVars['--background']) {
-              root.style.backgroundColor = themeVars['--background'];
-            }
-          }
-        } catch (e) {
-          console.warn('Early theme apply failed', e);
-        }
-      })();
+        })()
     </script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Work Helper</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module">
-      import('/src/main.tsx')
-    </script>
-  </body>
+</head>
+<body>
+<div id="root"></div>
+<script type="module">
+    import('/src/main.tsx')
+</script>
+</body>
 </html>

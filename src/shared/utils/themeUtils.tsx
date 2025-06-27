@@ -23,7 +23,26 @@ export const useTheme = () => {
 }
 
 
-
+// lightVars, darkVars 를 로컬 스토리지 에서 들고옴
+export const getCustomVarsFromLocalStorage = (): {
+    lightVars: Record<string, string>;
+    darkVars: Record<string, string>;
+} => {
+    try {
+        const raw = localStorage.getItem(VARS_KEY)
+        if (!raw) {
+            return { lightVars: {}, darkVars: {} }
+        }
+        const parsed = JSON.parse(raw)
+        return {
+            lightVars: parsed.lightVars || {},
+            darkVars: parsed.darkVars || {},
+        }
+    } catch {
+        console.warn('Invalid vite-ui-theme-vars format in localStorage')
+        return { lightVars: {}, darkVars: {} }
+    }
+}
 
 
 
@@ -45,27 +64,6 @@ export const saveThemeVar = (theme: Theme, key: string, value: string) => {
     localStorage.setItem(VARS_KEY, JSON.stringify(updated))
 }
 
-
-// lightVars, darkVars 를 로컬 스토리지 에서 들고옴
-export const getCustomVarsFromLocalStorage = (): {
-    lightVars: Record<string, string>;
-    darkVars: Record<string, string>;
-} => {
-    try {
-        const raw = localStorage.getItem(VARS_KEY)
-        if (!raw) {
-            return { lightVars: {}, darkVars: {} }
-        }
-        const parsed = JSON.parse(raw)
-        return {
-            lightVars: parsed.lightVars || {},
-            darkVars: parsed.darkVars || {},
-        }
-    } catch {
-        console.warn('Invalid vite-ui-theme-vars format in localStorage')
-        return { lightVars: {}, darkVars: {} }
-    }
-}
 
 
 // 변경된 테마를 적용
