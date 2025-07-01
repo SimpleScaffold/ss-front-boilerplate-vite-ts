@@ -1,19 +1,19 @@
 export function debounce<T extends (...args: any[]) => void>(
     fn: T,
-    delay: number
+    delay: number,
 ): T & { cancel: () => void } {
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: NodeJS.Timeout
 
     const debounced = function (this: unknown, ...args: Parameters<T>) {
-        clearTimeout(timeoutId);
+        clearTimeout(timeoutId)
         timeoutId = setTimeout(() => {
-            fn.apply(this, args);
-        }, delay);
-    } as T & { cancel: () => void };
+            fn.apply(this, args)
+        }, delay)
+    } as T & { cancel: () => void }
 
     debounced.cancel = () => {
-        clearTimeout(timeoutId);
-    };
+        clearTimeout(timeoutId)
+    }
 
-    return debounced;
+    return debounced
 }

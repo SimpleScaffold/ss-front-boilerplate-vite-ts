@@ -3,42 +3,41 @@ import { Label } from 'src/shared/lib/shadcn/components/ui/label.tsx'
 import { debounce } from 'src/shared/utils/debounce.tsx'
 
 type ColorPickerProps = {
-    color: string;
-    onChange: (color: string) => void;
-    label: string;
-};
-
+    color: string
+    onChange: (color: string) => void
+    label: string
+}
 
 const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [localColor, setLocalColor] = useState(color);
+    const [isOpen, setIsOpen] = useState(false)
+    const [localColor, setLocalColor] = useState(color)
 
     useEffect(() => {
-        setLocalColor(color);
-    }, [color]);
+        setLocalColor(color)
+    }, [color])
 
     const debouncedOnChange = useMemo(
         () => debounce((value: string) => onChange(value), 30),
-        [onChange]
-    );
+        [onChange],
+    )
 
     const handleColorChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const newColor = e.target.value;
-        setLocalColor(newColor);
-        debouncedOnChange(newColor);
-    };
+        const newColor = e.target.value
+        setLocalColor(newColor)
+        debouncedOnChange(newColor)
+    }
 
     useEffect(() => {
         return () => {
-            debouncedOnChange.cancel();
-        };
-    }, [debouncedOnChange]);
+            debouncedOnChange.cancel()
+        }
+    }, [debouncedOnChange])
 
     return (
         <div className="mb-3">
-            <div className="flex items-center justify-between mb-1.5">
+            <div className="mb-1.5 flex items-center justify-between">
                 <Label
-                    htmlFor={`color-${label.replace(/\s+/g, "-").toLowerCase()}`}
+                    htmlFor={`color-${label.replace(/\s+/g, '-').toLowerCase()}`}
                     className="text-xs font-medium"
                 >
                     {label}
@@ -46,27 +45,27 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
             </div>
             <div className="flex items-center gap-1">
                 <div
-                    className="h-8 w-8 border cursor-pointer overflow-hidden relative flex items-center justify-center rounded"
+                    className="relative flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded border"
                     style={{ backgroundColor: localColor }}
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <input
                         type="color"
-                        id={`color-${label.replace(/\s+/g, "-").toLowerCase()}`}
+                        id={`color-${label.replace(/\s+/g, '-').toLowerCase()}`}
                         value={localColor}
                         onChange={handleColorChange}
-                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                     />
                 </div>
                 <input
                     type="text"
                     value={localColor}
                     onChange={handleColorChange}
-                    className="flex-1 h-8 px-2 text-sm rounded bg-input/25 border border-border/20"
+                    className="bg-input/25 border-border/20 h-8 flex-1 rounded border px-2 text-sm"
                 />
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default ColorPicker;
+export default ColorPicker

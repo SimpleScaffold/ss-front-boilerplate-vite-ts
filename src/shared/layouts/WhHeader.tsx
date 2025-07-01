@@ -4,9 +4,7 @@ import SScolorDrawer from 'src/shared/components/theme/SScolorDrawer.tsx'
 
 const WhHeader = () => {
     return (
-        <header
-            className="flex items-center justify-between whitespace-nowrap border-b border-solid  px-10 py-4"
-        >
+        <header className="flex items-center justify-between border-b border-solid px-10 py-4 whitespace-nowrap">
             <div className="flex items-center gap-8">
                 <BlurText
                     text="Euc Work Helper"
@@ -19,7 +17,7 @@ const WhHeader = () => {
             </div>
             <div className="flex items-center gap-2">
                 <SSdarkmodeSwitch />
-                <SScolorDrawer/>
+                <SScolorDrawer />
             </div>
         </header>
     )

@@ -13,10 +13,13 @@ const localState = {
 }
 
 const localReducers = {
-    locationChange: (state: typeof localState, action: PayloadAction<{
-        path: string,
-        state: unknown
-    }>) => {
+    locationChange: (
+        state: typeof localState,
+        action: PayloadAction<{
+            path: string
+            state: unknown
+        }>,
+    ) => {
         return {
             ...state,
             location: action.payload,
@@ -25,4 +28,8 @@ const localReducers = {
 }
 
 const module = reduxMaker(prefix, asyncRequests, localState, localReducers)
-export const { slice: routerSlice, actions: routerAction, saga: routerSaga } = module
+export const {
+    slice: routerSlice,
+    actions: routerAction,
+    saga: routerSaga,
+} = module

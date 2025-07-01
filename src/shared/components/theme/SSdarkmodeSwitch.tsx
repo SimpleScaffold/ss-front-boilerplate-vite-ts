@@ -11,9 +11,11 @@ const SSdarkmodeSwitch = () => {
             checked={isDarkTheme}
             onCheckedChange={() => setTheme(isDarkTheme ? 'light' : 'dark')}
             buttonIcon={
-                isDarkTheme
-                    ? <Moon className="h-4 w-4 text-primary" />
-                    : <Sun className="h-4 w-4 text-foreground" />
+                isDarkTheme ? (
+                    <Moon className="text-primary h-4 w-4" />
+                ) : (
+                    <Sun className="text-foreground h-4 w-4" />
+                )
             }
         />
     )

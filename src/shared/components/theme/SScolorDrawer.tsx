@@ -10,50 +10,58 @@ import {
     DrawerTrigger,
 } from 'src/shared/lib/shadcn/components/ui/drawer.tsx'
 import { Button } from 'src/shared/lib/shadcn/components/ui/button.tsx'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/shared/lib/shadcn/components/ui/tabs'
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from 'src/shared/lib/shadcn/components/ui/tabs'
 import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
 import ColorPicker from 'src/shared/components/theme/SScolorPicker.tsx'
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useState,
+} from 'react'
 import {
     applyThemeVariables,
-    getCustomVarsFromLocalStorage, handleReset,
-    saveThemeVar, useTheme,
+    getCustomVarsFromLocalStorage,
+    handleReset,
+    saveThemeVar,
+    useTheme,
 } from 'src/shared/utils/themeUtils.tsx'
 import { oklchToHex } from 'src/shared/utils/color.tsx'
 import { ScrollArea } from 'src/shared/lib/shadcn/components/ui/scroll-area.tsx'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'src/shared/lib/shadcn/components/ui/accordion.tsx'
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from 'src/shared/lib/shadcn/components/ui/accordion.tsx'
 import { shallowEqual, useSelector } from 'react-redux'
 import { RootState } from 'src/app/store/redux/reduxStore.tsx'
 
 const SScolorDrawer = () => {
-
     const { theme } = useTheme()
 
-
     return (
-        <Drawer
-            direction={'right'}
-        >
+        <Drawer direction={'right'}>
             <DrawerTrigger asChild>
-                <Settings
-                    className="cursor-pointer w-5 h-5"
-                />
+                <Settings className="h-5 w-5 cursor-pointer" />
             </DrawerTrigger>
 
-
-            <DrawerContent
-                className="flex flex-col "
-            >
-                <DrawerHeader
-
-                >
+            <DrawerContent className="flex flex-col">
+                <DrawerHeader>
                     <DrawerTitle
-                        className={'border-b pb-4 flex items-center justify-between'}
-                    ><p>Chose Your Own colors </p>   <SSdarkmodeSwitch /></DrawerTitle>
-                    <DrawerDescription>
-
-
-                    </DrawerDescription>
+                        className={
+                            'flex items-center justify-between border-b pb-4'
+                        }
+                    >
+                        <p>Chose Your Own colors </p> <SSdarkmodeSwitch />
+                    </DrawerTitle>
+                    <DrawerDescription></DrawerDescription>
                 </DrawerHeader>
                 <Tabs defaultValue="colors" className="flex-1 px-4">
                     <TabsList>
@@ -64,22 +72,17 @@ const SScolorDrawer = () => {
                     <ScrollArea
                         className={'h-[calc(100dvh-83px-36px-112px)] pr-4'}
                     >
-
-
                         <TabsContent value="colors">
                             <ColorPickers />
                         </TabsContent>
-                        <TabsContent value="etc">Change your password here.</TabsContent>
-
+                        <TabsContent value="etc">
+                            Change your password here.
+                        </TabsContent>
                     </ScrollArea>
-
                 </Tabs>
 
                 <DrawerFooter>
-                    <Button
-                        onClick={() => handleReset(theme)}
-                    > Reset
-                    </Button>
+                    <Button onClick={() => handleReset(theme)}> Reset</Button>
                     <DrawerClose asChild>
                         <Button variant="outline">Close</Button>
                     </DrawerClose>
@@ -91,42 +94,35 @@ const SScolorDrawer = () => {
 
 export default SScolorDrawer
 
-
 const ColorPickers = () => {
     const { theme } = useTheme()
 
+    useEffect(() => {}, [theme])
 
-    useEffect(() => {
-
-    }, [theme])
-
-
-    const {
-        colors,
-    } = useSelector(
+    const { colors } = useSelector(
         (state: RootState) => ({
-            colors: state.themeReducer.colors
+            colors: state.themeReducer.colors,
         }),
-        shallowEqual
+        shallowEqual,
     )
-
-
-
 
     const handleColorChange = (key: string) => (color: string) => {
         saveThemeVar(theme, key, color)
         applyThemeVariables(theme)
     }
 
-
     return (
-        <div className="space-y-4 mt-4">
+        <div className="mt-4 space-y-4">
             <ColorPicker
                 color={colors.background}
                 label="Background Color"
                 onChange={handleColorChange('--background')}
             />
-            <ColorPicker color={colors.foreground} label="Foreground Color" onChange={handleColorChange('--foreground')} />
+            <ColorPicker
+                color={colors.foreground}
+                label="Foreground Color"
+                onChange={handleColorChange('--foreground')}
+            />
             {/*<ColorPicker color={card} label="Card Color" onChange={handleColorChange('--card')} />*/}
             {/*<ColorPicker color={cardForeground} label="Card Foreground"*/}
             {/*             onChange={handleColorChange('--card-foreground')} />*/}
@@ -168,11 +164,9 @@ const ColorPickers = () => {
             {/*<ColorPicker color={sidebarBorder} label="Sidebar Border"*/}
             {/*             onChange={handleColorChange('--sidebar-border')} />*/}
             {/*<ColorPicker color={sidebarRing} label="Sidebar Ring" onChange={handleColorChange('--sidebar-ring')} />*/}
-
         </div>
     )
 }
-
 
 const SScolorDrawerCategory = () => {
     return (
@@ -186,13 +180,14 @@ const SScolorDrawerCategory = () => {
                 <AccordionTrigger>Product Information</AccordionTrigger>
                 <AccordionContent className="flex flex-col gap-4 text-balance">
                     <p>
-                        Our flagship product combines cutting-edge technology with sleek
-                        design. Built with premium materials, it offers unparalleled
-                        performance and reliability.
+                        Our flagship product combines cutting-edge technology
+                        with sleek design. Built with premium materials, it
+                        offers unparalleled performance and reliability.
                     </p>
                     <p>
-                        Key features include advanced processing capabilities, and an
-                        intuitive user interface designed for both beginners and experts.
+                        Key features include advanced processing capabilities,
+                        and an intuitive user interface designed for both
+                        beginners and experts.
                     </p>
                 </AccordionContent>
             </AccordionItem>
@@ -200,13 +195,15 @@ const SScolorDrawerCategory = () => {
                 <AccordionTrigger>Shipping Details</AccordionTrigger>
                 <AccordionContent className="flex flex-col gap-4 text-balance">
                     <p>
-                        We offer worldwide shipping through trusted courier partners.
-                        Standard delivery takes 3-5 business days, while express shipping
-                        ensures delivery within 1-2 business days.
+                        We offer worldwide shipping through trusted courier
+                        partners. Standard delivery takes 3-5 business days,
+                        while express shipping ensures delivery within 1-2
+                        business days.
                     </p>
                     <p>
-                        All orders are carefully packaged and fully insured. Track your
-                        shipment in real-time through our dedicated tracking portal.
+                        All orders are carefully packaged and fully insured.
+                        Track your shipment in real-time through our dedicated
+                        tracking portal.
                     </p>
                 </AccordionContent>
             </AccordionItem>
@@ -214,18 +211,17 @@ const SScolorDrawerCategory = () => {
                 <AccordionTrigger>Return Policy</AccordionTrigger>
                 <AccordionContent className="flex flex-col gap-4 text-balance">
                     <p>
-                        We stand behind our products with a comprehensive 30-day return
-                        policy. If you&apos;re not completely satisfied, simply return the
-                        item in its original condition.
+                        We stand behind our products with a comprehensive 30-day
+                        return policy. If you&apos;re not completely satisfied,
+                        simply return the item in its original condition.
                     </p>
                     <p>
-                        Our hassle-free return process includes free return shipping and
-                        full refunds processed within 48 hours of receiving the returned
-                        item.
+                        Our hassle-free return process includes free return
+                        shipping and full refunds processed within 48 hours of
+                        receiving the returned item.
                     </p>
                 </AccordionContent>
             </AccordionItem>
         </Accordion>
     )
 }
-

@@ -1,20 +1,19 @@
 // src/shared/providers/ThemeProvider.tsx
 import { useState, useLayoutEffect, ReactNode, useEffect } from 'react'
+import { applyThemeVariables } from 'src/shared/utils/themeUtils'
 import {
-    applyThemeVariables,
-} from 'src/shared/utils/themeUtils'
-import { STORAGE_KEY, Theme, ThemeContext } from 'src/shared/lib/shadcn/components/ThemeContext.tsx'
-
+    STORAGE_KEY,
+    Theme,
+    ThemeContext,
+} from 'src/shared/lib/shadcn/components/ThemeContext.tsx'
 
 export const ThemeProvider = ({
-                                  children,
-                                  defaultTheme,
-                              }: {
+    children,
+    defaultTheme,
+}: {
     children: ReactNode
     defaultTheme?: Theme
 }) => {
-
-
     const getInitialTheme = (): Theme => {
         // 1순위 - 스토리지에 값이 있으면 그것을 반환
         const stored = localStorage.getItem(STORAGE_KEY) as Theme
@@ -31,7 +30,6 @@ export const ThemeProvider = ({
             : 'light'
     }
 
-
     const [theme, setThemeState] = useState<Theme>(getInitialTheme)
 
     const setTheme = (newTheme: 'light' | 'dark') => {
@@ -40,16 +38,10 @@ export const ThemeProvider = ({
     }
 
     useLayoutEffect(() => {
-
-
-
-
-
         const root = document.documentElement
         root.classList.remove('light', 'dark')
         root.classList.add(theme)
         applyThemeVariables(theme)
-
 
         // setDefaultThemeVars(theme)
     }, [theme])

@@ -4,15 +4,12 @@ import React, { ReactNode } from 'react'
 
 interface WhLayoutProps {
     children?: ReactNode
-
 }
 
-
 const WhLayout = ({ children }: WhLayoutProps) => {
-
     return (
         <div>
-            <WhHeader/>
+            <WhHeader />
             {children}
         </div>
     )

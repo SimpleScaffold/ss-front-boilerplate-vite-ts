@@ -6,7 +6,6 @@ import { ThemeProvider } from 'src/shared/lib/shadcn/components/ThemeProvider.ts
 import { useEffect } from 'react'
 
 function App() {
-
     useRouteListener()
 
     // 새로 고침시 애니메이션, 임시 배경색상 처리
@@ -14,7 +13,8 @@ function App() {
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 const root = document.documentElement
-                const computedBg = getComputedStyle(root).getPropertyValue('--background')
+                const computedBg =
+                    getComputedStyle(root).getPropertyValue('--background')
 
                 if (computedBg?.trim()) {
                     root.style.backgroundColor = ''
@@ -24,7 +24,6 @@ function App() {
             })
         })
     }, [])
-
 
     return (
         <ThemeProvider>

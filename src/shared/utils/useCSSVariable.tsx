@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 
-const useCSSVariable = (variableName: string, element: HTMLElement = document.documentElement) => {
+const useCSSVariable = (
+    variableName: string,
+    element: HTMLElement = document.documentElement,
+) => {
     const [value, setValue] = useState<string>('')
 
     useEffect(() => {
