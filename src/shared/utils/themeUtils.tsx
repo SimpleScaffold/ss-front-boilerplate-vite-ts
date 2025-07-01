@@ -81,6 +81,7 @@ export const applyThemeVariables = (theme: Theme) => {
         console.log(`[Theme] No custom vars found for ${theme}, using CSS default`);
         return;
     }
+
     // localStorage에 있는 변수만 적용
     Object.entries(vars).forEach(([key, value]) => {
         root.style.setProperty(key, value);
