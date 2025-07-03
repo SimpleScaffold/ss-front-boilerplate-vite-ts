@@ -101,36 +101,6 @@ export const clearThemeVariables = () => {
     })
 }
 
-// 로컬에 값이 있으면 그걸로 저장, 없으면 패스, 배경은 만약 없으면 기본값으로 로컬 스토리지에 넣어줌 (새로고침 깜빡임 방지용)
-export const setDefaultThemeVars = (theme: Theme) => {
-    const raw = localStorage.getItem(VARS_KEY)
-    const parsed = raw ? JSON.parse(raw) : {}
-
-    const ensureVars = (theme: Theme, defaults: Record<string, string>) => {
-        const key = `${theme}Vars`
-        if (!parsed[key] || Object.keys(parsed[key]).length === 0) {
-            parsed[key] = defaults
-        }
-
-        // --background 보장 (적용 하고 값을 등록해야 하기에 여기 위치)
-        if (!parsed[key]['--background']) {
-            parsed[key]['--background'] =
-                getComputedStyle(document.documentElement).getPropertyValue(
-                    '--background',
-                )
-        }
-    }
-
-    // 선택된 테마에 맞는 변수만 적용
-    if (theme === 'light') {
-        ensureVars('light', {})
-    } else if (theme === 'dark') {
-        ensureVars('dark', {})
-    }
-
-    localStorage.setItem(VARS_KEY, JSON.stringify(parsed))
-}
-
 // 특정 테마를 리셋함
 export const handleReset = (theme: Theme) => {
     const raw = localStorage.getItem(VARS_KEY)

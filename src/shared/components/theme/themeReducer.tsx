@@ -6,8 +6,7 @@ const prefix = 'theme'
 const asyncRequests = [] as const
 
 const localState = {
-    colors: {
-    } as Record<string, string>,
+    colors: {} as Record<string, string>,
 }
 
 const localReducers = {

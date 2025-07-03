@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { Label } from 'src/shared/lib/shadcn/components/ui/label.tsx'
 import { debounce } from 'src/shared/utils/debounce.tsx'
-import { oklchToHex } from 'src/shared/utils/colorUtils.tsx'
+import { hexToOklch, oklchToHex } from 'src/shared/utils/colorUtils.tsx'
 
 type ColorPickerProps = {
     color: string
@@ -12,9 +12,8 @@ type ColorPickerProps = {
 const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
     const [localColor, setLocalColor] = useState(color)
 
-
     useEffect(() => {
-        setLocalColor(color)
+        setLocalColor(hexToOklch(color))
     }, [color])
 
     const displayHexColor = useMemo(() => {
@@ -28,11 +27,10 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
     )
 
     const handleColorChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const newColor = e.target.value
+        const newColor = hexToOklch(e.target.value)
         setLocalColor(newColor)
         debouncedOnChange(newColor)
     }
-
 
     useEffect(() => {
         return () => {

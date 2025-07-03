@@ -92,7 +92,6 @@ const ColorPickers = () => {
 
     useEffect(() => {}, [theme])
 
-
     const dispatch = useDispatch()
 
     const colorsKeys = [
@@ -143,13 +142,12 @@ const ColorPickers = () => {
     useEffect(() => {
         // console.log(getCurrentThemeVars())
 
-        dispatch(themeAction.setColors( getCurrentThemeVars()))
+        dispatch(themeAction.setColors(getCurrentThemeVars()))
     }, [theme, dispatch])
 
     const { colors } = useSelector(
         (state: RootState) => ({
             colors: state.themeReducer.colors,
-
         }),
         shallowEqual,
     )
@@ -158,8 +156,6 @@ const ColorPickers = () => {
         saveThemeVar(theme, key, color)
         applyThemeVariables(theme)
     }
-
-
 
     return (
         <div className="mt-4 space-y-4">

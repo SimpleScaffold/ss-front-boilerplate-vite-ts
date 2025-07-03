@@ -42,7 +42,6 @@ export const ThemeProvider = ({
         root.classList.remove('light', 'dark')
         root.classList.add(theme)
         applyThemeVariables(theme)
-
     }, [theme])
 
     return (
