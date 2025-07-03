@@ -4,7 +4,6 @@ import {
     Theme,
     ThemeContext,
 } from 'src/shared/lib/shadcn/components/ThemeContext.tsx'
-import { oklchToHex } from 'src/shared/utils/color.tsx'
 
 const VARS_KEY = 'vite-ui-theme-vars'
 
@@ -115,11 +114,10 @@ export const setDefaultThemeVars = (theme: Theme) => {
 
         // --background 보장 (적용 하고 값을 등록해야 하기에 여기 위치)
         if (!parsed[key]['--background']) {
-            parsed[key]['--background'] = oklchToHex(
+            parsed[key]['--background'] =
                 getComputedStyle(document.documentElement).getPropertyValue(
                     '--background',
-                ),
-            )
+                )
         }
     }
 
