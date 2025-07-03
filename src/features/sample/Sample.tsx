@@ -9,9 +9,6 @@ const Sample = () => {
 
     const [cccc, setCccc] = useState(0)
 
-    useEffect(() => {
-        console.log(cccc)
-    }, [cccc])
 
     const dispatch = useAppDispatch()
 

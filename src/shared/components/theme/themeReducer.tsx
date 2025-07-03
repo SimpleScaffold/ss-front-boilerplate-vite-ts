@@ -1,5 +1,6 @@
 import { reduxMaker } from 'src/app/store/redux/reduxUtils.ts'
 import { PayloadAction } from '@reduxjs/toolkit'
+import { colorGroups } from 'src/shared/components/theme/colorConstants.tsx'
 
 const prefix = 'theme'
 
@@ -12,11 +13,15 @@ const localState = {
 const localReducers = {
     setColors: (
         state: typeof localState,
-        action: PayloadAction<Record<string, string>>,
     ) => {
-        console.log(action.payload)
-
-        state.colors = action.payload
+        const styles = getComputedStyle(document.documentElement)
+        const result: Record<string, string> = {}
+        for (const group of colorGroups) {
+            for (const key of group.keys) {
+                result[key] = styles.getPropertyValue(key).trim()
+            }
+        }
+        state.colors = result
     },
     setColor: (
         state: typeof localState,

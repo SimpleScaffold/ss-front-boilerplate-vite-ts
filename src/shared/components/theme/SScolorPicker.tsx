@@ -13,6 +13,9 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
     const [localColor, setLocalColor] = useState(color)
 
     useEffect(() => {
+        if(label === 'Background') {
+            console.log(color)
+        }
         setLocalColor(hexToOklch(color))
     }, [color])
 
@@ -61,12 +64,10 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
                         className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                     />
                 </div>
-                <input
-                    type="text"
-                    value={localColor}
-                    onChange={handleColorChange}
-                    className="bg-input/25 border-border/20 h-8 flex-1 rounded border px-2 text-sm"
-                />
+                <Label
+                    className={'bg-input/25 border-border/20 h-8 flex-1 rounded border px-2 text-sm'}
+                >{localColor}</Label>
+
             </div>
         </div>
     )

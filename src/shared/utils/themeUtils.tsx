@@ -4,6 +4,8 @@ import {
     Theme,
     ThemeContext,
 } from 'src/shared/lib/shadcn/components/ThemeContext.tsx'
+import store from 'src/app/store/redux/reduxStore.tsx'
+import { themeAction } from 'src/shared/components/theme/themeReducer.tsx'
 
 const VARS_KEY = 'vite-ui-theme-vars'
 
@@ -71,7 +73,7 @@ export const applyThemeVariables = (theme: Theme) => {
 
     // localStorage에 해당 테마 정보가 없으면 CSS 기본값 그대로 유지
     if (!vars || Object.keys(vars).length === 0) {
-        console.log(
+        console.warn(
             `[Theme] No custom vars found for ${theme}, using CSS default`,
         )
         return
@@ -94,9 +96,6 @@ export const clearThemeVariables = () => {
     ])
 
     allKeys.forEach((key) => {
-        console.log(key)
-        console.log(key)
-
         root.style.removeProperty(key)
     })
 }
@@ -122,4 +121,7 @@ export const handleReset = (theme: Theme) => {
         })
         applyThemeVariables(theme)
     }
+
+    store.dispatch(themeAction.setColors({}))
 }
+
