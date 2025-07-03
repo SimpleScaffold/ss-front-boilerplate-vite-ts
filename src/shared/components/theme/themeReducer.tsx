@@ -6,7 +6,8 @@ const prefix = 'theme'
 const asyncRequests = [] as const
 
 const localState = {
-    colors: {} as Record<string, string>,
+    colors: {
+    } as Record<string, string>,
 }
 
 const localReducers = {
@@ -14,6 +15,8 @@ const localReducers = {
         state: typeof localState,
         action: PayloadAction<Record<string, string>>,
     ) => {
+        console.log(action.payload)
+
         state.colors = action.payload
     },
     setColor: (

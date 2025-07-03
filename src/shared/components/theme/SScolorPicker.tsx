@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { Label } from 'src/shared/lib/shadcn/components/ui/label.tsx'
 import { debounce } from 'src/shared/utils/debounce.tsx'
+import { oklchToHex } from 'src/shared/utils/colorUtils.tsx'
 
 type ColorPickerProps = {
     color: string
@@ -9,12 +10,17 @@ type ColorPickerProps = {
 }
 
 const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
-    const [isOpen, setIsOpen] = useState(false)
     const [localColor, setLocalColor] = useState(color)
+
 
     useEffect(() => {
         setLocalColor(color)
     }, [color])
+
+    const displayHexColor = useMemo(() => {
+        if (localColor?.startsWith('#')) return localColor
+        return oklchToHex(localColor)
+    }, [localColor])
 
     const debouncedOnChange = useMemo(
         () => debounce((value: string) => onChange(value), 30),
@@ -26,6 +32,7 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
         setLocalColor(newColor)
         debouncedOnChange(newColor)
     }
+
 
     useEffect(() => {
         return () => {
@@ -47,12 +54,11 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
                 <div
                     className="relative flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded border"
                     style={{ backgroundColor: localColor }}
-                    onClick={() => setIsOpen(!isOpen)}
                 >
                     <input
                         type="color"
                         id={`color-${label.replace(/\s+/g, '-').toLowerCase()}`}
-                        value={localColor}
+                        value={displayHexColor}
                         onChange={handleColorChange}
                         className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                     />

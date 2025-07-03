@@ -43,7 +43,6 @@ export const ThemeProvider = ({
         root.classList.add(theme)
         applyThemeVariables(theme)
 
-        // setDefaultThemeVars(theme)
     }, [theme])
 
     return (

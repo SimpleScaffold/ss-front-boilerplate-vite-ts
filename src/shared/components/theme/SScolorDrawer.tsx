@@ -18,21 +18,13 @@ import {
 } from 'src/shared/lib/shadcn/components/ui/tabs'
 import SSdarkmodeSwitch from 'src/shared/components/theme/SSdarkmodeSwitch.tsx'
 import ColorPicker from 'src/shared/components/theme/SScolorPicker.tsx'
-import {
-    useCallback,
-    useEffect,
-    useLayoutEffect,
-    useMemo,
-    useState,
-} from 'react'
+import { useEffect } from 'react'
 import {
     applyThemeVariables,
-    getCustomVarsFromLocalStorage,
     handleReset,
     saveThemeVar,
     useTheme,
 } from 'src/shared/utils/themeUtils.tsx'
-import { oklchToHex } from 'src/shared/utils/color.tsx'
 import { ScrollArea } from 'src/shared/lib/shadcn/components/ui/scroll-area.tsx'
 import {
     Accordion,
@@ -40,8 +32,9 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from 'src/shared/lib/shadcn/components/ui/accordion.tsx'
-import { shallowEqual, useSelector } from 'react-redux'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'src/app/store/redux/reduxStore.tsx'
+import { themeAction } from 'src/shared/components/theme/themeReducer.tsx'
 
 const SScolorDrawer = () => {
     const { theme } = useTheme()
@@ -99,9 +92,64 @@ const ColorPickers = () => {
 
     useEffect(() => {}, [theme])
 
+
+    const dispatch = useDispatch()
+
+    const colorsKeys = [
+        '--background',
+        '--foreground',
+        '--card',
+        '--card-foreground',
+        '--popover',
+        '--popover-foreground',
+        '--primary',
+        '--primary-foreground',
+        '--secondary',
+        '--secondary-foreground',
+        '--muted',
+        '--muted-foreground',
+        '--accent',
+        '--accent-foreground',
+        '--destructive',
+        '--border',
+        '--input',
+        '--ring',
+        '--chart-1',
+        '--chart-2',
+        '--chart-3',
+        '--chart-4',
+        '--chart-5',
+        '--sidebar',
+        '--sidebar-foreground',
+        '--sidebar-primary',
+        '--sidebar-primary-foreground',
+        '--sidebar-accent',
+        '--sidebar-accent-foreground',
+        '--sidebar-border',
+        '--sidebar-ring',
+    ] as const
+
+    type ColorKey = (typeof colorsKeys)[number]
+
+    const getCurrentThemeVars = (): Record<ColorKey, string> => {
+        const styles = getComputedStyle(document.documentElement)
+        const result = {} as Record<ColorKey, string>
+        for (const key of colorsKeys) {
+            result[key] = styles.getPropertyValue(key).trim()
+        }
+        return result
+    }
+
+    useEffect(() => {
+        // console.log(getCurrentThemeVars())
+
+        dispatch(themeAction.setColors( getCurrentThemeVars()))
+    }, [theme, dispatch])
+
     const { colors } = useSelector(
         (state: RootState) => ({
             colors: state.themeReducer.colors,
+
         }),
         shallowEqual,
     )
@@ -111,15 +159,17 @@ const ColorPickers = () => {
         applyThemeVariables(theme)
     }
 
+
+
     return (
         <div className="mt-4 space-y-4">
             <ColorPicker
-                color={colors.background}
+                color={colors['--background']}
                 label="Background Color"
                 onChange={handleColorChange('--background')}
             />
             <ColorPicker
-                color={colors.foreground}
+                color={colors['--foreground']}
                 label="Foreground Color"
                 onChange={handleColorChange('--foreground')}
             />
