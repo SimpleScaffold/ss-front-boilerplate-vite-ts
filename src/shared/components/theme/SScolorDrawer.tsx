@@ -88,23 +88,20 @@ const SScolorDrawer = () => {
 
 export default SScolorDrawer
 
-
-
 const ColorPickers = () => {
     const { theme } = useTheme()
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(themeAction.setColors({}))
-    }, [ theme, dispatch])
+    }, [theme, dispatch])
 
     const { colors } = useSelector(
         (state: RootState) => ({
             colors: state.themeReducer.colors,
         }),
-        shallowEqual
+        shallowEqual,
     )
-
 
     const handleColorChange = (key: string) => (color: string) => {
         saveThemeVar(theme, key, color)
@@ -121,9 +118,12 @@ const ColorPickers = () => {
                             {group.keys.map((key) => (
                                 <ColorPicker
                                     key={key}
-                                    variableKey = {key}
+                                    variableKey={key}
                                     color={colors[key]}
-                                    label={key.replace('--', '').replace(/-/g, ' ').toLowerCase()}
+                                    label={key
+                                        .replace('--', '')
+                                        .replace(/-/g, ' ')
+                                        .toLowerCase()}
                                     onChange={handleColorChange(key)}
                                 />
                             ))}
@@ -134,4 +134,3 @@ const ColorPickers = () => {
         </Accordion>
     )
 }
-

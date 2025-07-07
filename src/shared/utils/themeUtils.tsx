@@ -121,4 +121,3 @@ export const handleReset = (theme: Theme) => {
 
     store.dispatch(themeAction.setColors({}))
 }
-

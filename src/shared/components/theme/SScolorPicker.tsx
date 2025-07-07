@@ -12,7 +12,12 @@ type ColorPickerProps = {
     label: string
 }
 
-const ColorPicker = ({ variableKey, color, onChange, label }: ColorPickerProps) => {
+const ColorPicker = ({
+    variableKey,
+    color,
+    onChange,
+    label,
+}: ColorPickerProps) => {
     const [localColor, setLocalColor] = useState(color)
 
     useEffect(() => {
@@ -27,7 +32,7 @@ const ColorPicker = ({ variableKey, color, onChange, label }: ColorPickerProps) 
                 dispatch(themeAction.setColor({ key, value }))
                 onChange(value)
             }, 200),
-        [dispatch, onChange]
+        [dispatch, onChange],
     )
 
     useEffect(() => {

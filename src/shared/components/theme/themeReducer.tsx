@@ -11,17 +11,12 @@ const localState = {
 }
 
 const localReducers = {
-    setColors: (
-        state: typeof localState,
-    ) => {
+    setColors: (state: typeof localState) => {
+        const keys = colorGroups.flatMap((g) => g.keys)
         const styles = getComputedStyle(document.documentElement)
-        const result: Record<string, string> = {}
-        for (const group of colorGroups) {
-            for (const key of group.keys) {
-                result[key] = styles.getPropertyValue(key).trim()
-            }
-        }
-        state.colors = result
+        state.colors = Object.fromEntries(
+            keys.map((key) => [key, styles.getPropertyValue(key).trim()]),
+        )
     },
     setColor: (
         state: typeof localState,
