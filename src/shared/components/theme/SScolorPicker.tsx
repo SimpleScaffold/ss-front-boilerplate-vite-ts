@@ -2,22 +2,33 @@ import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { Label } from 'src/shared/lib/shadcn/components/ui/label.tsx'
 import { debounce } from 'src/shared/utils/debounce.tsx'
 import { hexToOklch, oklchToHex } from 'src/shared/utils/colorUtils.tsx'
+import { useDispatch } from 'react-redux'
+import { themeAction } from 'src/shared/components/theme/themeReducer.tsx'
 
 type ColorPickerProps = {
+    variableKey: string
     color: string
     onChange: (color: string) => void
     label: string
 }
 
-const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
+const ColorPicker = ({ variableKey , color, onChange, label }: ColorPickerProps) => {
+
     const [localColor, setLocalColor] = useState(color)
 
     useEffect(() => {
-        if(label === 'Background') {
-            console.log(color)
-        }
         setLocalColor(hexToOklch(color))
     }, [color])
+
+    const dispatch = useDispatch()
+
+    const debouncedDispatch = useMemo(
+        () => debounce((key: string, value: string) => {
+            dispatch(themeAction.setColor({ key, value }))
+            onChange?.(value)
+        }, 30),
+        [dispatch, onChange]
+    )
 
     const displayHexColor = useMemo(() => {
         if (localColor?.startsWith('#')) return localColor
@@ -32,7 +43,7 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
     const handleColorChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newColor = hexToOklch(e.target.value)
         setLocalColor(newColor)
-        debouncedOnChange(newColor)
+        debouncedDispatch(variableKey,newColor)
     }
 
     useEffect(() => {

@@ -105,6 +105,7 @@ const ColorPickers = () => {
         shallowEqual
     )
 
+
     const handleColorChange = (key: string) => (color: string) => {
         saveThemeVar(theme, key, color)
         applyThemeVariables(theme)
@@ -120,6 +121,7 @@ const ColorPickers = () => {
                             {group.keys.map((key) => (
                                 <ColorPicker
                                     key={key}
+                                    variableKey = {key}
                                     color={colors[key]}
                                     label={key.replace('--', '').replace(/-/g, ' ').toLowerCase()}
                                     onChange={handleColorChange(key)}

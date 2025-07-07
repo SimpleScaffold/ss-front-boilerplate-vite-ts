@@ -73,9 +73,6 @@ export const applyThemeVariables = (theme: Theme) => {
 
     // localStorage에 해당 테마 정보가 없으면 CSS 기본값 그대로 유지
     if (!vars || Object.keys(vars).length === 0) {
-        console.warn(
-            `[Theme] No custom vars found for ${theme}, using CSS default`,
-        )
         return
     }
 
