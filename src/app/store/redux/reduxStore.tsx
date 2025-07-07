@@ -7,16 +7,11 @@ import { sampleSaga, sampleSlice } from 'src/features/sample/sampleReducer.ts'
 const reducers = {
     routerReducer: routerSlice.reducer,
     sampleReducer: sampleSlice.reducer,
-
 }
 
 export function* rootSaga() {
-    yield all([
-        sampleSaga(),
-        routerSaga()
-    ])
+    yield all([sampleSaga(), routerSaga()])
 }
-
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -29,7 +24,6 @@ const store = configureStore({
 export type AppStore = typeof store
 export type RootState = ReturnType<AppStore['getState']>
 export type AppDispatch = AppStore['dispatch']
-
 
 sagaMiddleware.run(rootSaga)
 export default store

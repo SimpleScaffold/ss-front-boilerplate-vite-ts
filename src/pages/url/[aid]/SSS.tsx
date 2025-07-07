@@ -1,9 +1,5 @@
 const Sss = () => {
-    return (
-        <div>
-         xxxxxxxxxxxx
-        </div>
-    )
+    return <div>xxxxxxxxxxxx</div>
 }
 
 export default Sss

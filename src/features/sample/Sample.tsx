@@ -5,7 +5,6 @@ import { sampleAction } from 'src/features/sample/sampleReducer.ts'
 import { toast } from 'react-toastify'
 
 const Sample = () => {
-
     const navigate = useNavigate()
 
     const [cccc, setCccc] = useState(0)
@@ -21,46 +20,39 @@ const Sample = () => {
 
         return () => {
             dispatch(sampleAction.initialize('value'))
-
         }
     }, [])
     const notify = () => toast('Wow so easy !')
 
     return (
         <div>
-            <div
-                className={'w-50 h-50 bg-accent'}
-            >
-
-            </div>
+            <div className={'bg-accent h-50 w-50'}></div>
             <button onClick={notify}>Notify !</button>
-
             <button
                 onClick={() => {
                     navigate('/')
                 }}
-            >홈으로
+            >
+                홈으로
             </button>
-
-
             <div>
                 <button
                     onClick={() => {
                         navigate('/sample/sample')
                     }}
-                >sssssssssssss
+                >
+                    sssssssssssss
                 </button>
-
             </div>
             {cccc}
             <button
                 onClick={() => {
                     setCccc((state) => state + 1)
                 }}
-            >bbbbbbbbbbbbbbbbbbbbbbb
+            >
+                bbbbbbbbbbbbbbbbbbbbbbb
             </button>
-            sdfsdfd
-            sdfsdfd
+            sdfsdfd sdfsdfd
         </div>
     )
 }

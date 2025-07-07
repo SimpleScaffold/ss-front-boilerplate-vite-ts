@@ -3,15 +3,16 @@ import HomePage from 'src/pages/HomePage'
 import React, { lazy, Suspense } from 'react'
 import NotFoundPage from 'src/pages/extra/NotFoundPage.tsx'
 
-
 // NOTE: https://reactrouter.com/start/data/routing
 // TODO: lazy loading 적용해야 할까? > 필요 없을거 같음
 
+const MODULES = import.meta.glob('src/pages/url/**/*.tsx', {
+    eager: true,
+}) as Record<string, { default: React.FC }>
 
-
-const MODULES = import.meta.glob('src/pages/url/**/*.tsx', { eager: true }) as Record<string, { default: React.FC }>
-
-const generateRoutes = (modules: Record<string, { default: React.FC }>): RouteObject[] => {
+const generateRoutes = (
+    modules: Record<string, { default: React.FC }>,
+): RouteObject[] => {
     return Object.entries(modules).map(([path, module]) => {
         // 파일 경로에서 'src/pages/url/' 이후의 경로를 추출
         const routePath = path
@@ -30,23 +31,18 @@ const generateRoutes = (modules: Record<string, { default: React.FC }>): RouteOb
     })
 }
 
-
 const router = createBrowserRouter([
     {
         path: '/',
         element: <HomePage />,
     },
 
-
     ...generateRoutes(MODULES),
-
-
 
     {
         path: '*',
         element: <NotFoundPage />,
     },
-
 ])
 
 export default router

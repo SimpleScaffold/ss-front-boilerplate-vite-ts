@@ -3,25 +3,27 @@ import { AxiosResponse } from 'axios'
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { AnyAction, SagaIterator } from 'redux-saga'
 
-
 type AsyncState<DataType> = {
-    data: DataType | null;
-    loading: boolean;
-    error: boolean;
-    errorMsg: string;
-};
-
+    data: DataType | null
+    loading: boolean
+    error: boolean
+    errorMsg: string
+}
 
 //프런트에서 쓰기 위해 보여주는 값들
 export const reducerUtils = {
-    init: <DataType>(defaultType: DataType | null = null): AsyncState<DataType> => ({
+    init: <DataType>(
+        defaultType: DataType | null = null,
+    ): AsyncState<DataType> => ({
         data: defaultType,
         loading: false,
         error: false,
         errorMsg: '',
     }),
 
-    loading: <DataType>(prevData: DataType | null = null): AsyncState<DataType> => ({
+    loading: <DataType>(
+        prevData: DataType | null = null,
+    ): AsyncState<DataType> => ({
         data: prevData,
         loading: true,
         error: false,
@@ -35,7 +37,10 @@ export const reducerUtils = {
         errorMsg: '',
     }),
 
-    error: <DataType>(prevData: DataType | null = null, errorMsg: string): AsyncState<DataType> => ({
+    error: <DataType>(
+        prevData: DataType | null = null,
+        errorMsg: string,
+    ): AsyncState<DataType> => ({
         data: prevData,
         loading: false,
         error: true,
@@ -44,26 +49,31 @@ export const reducerUtils = {
 }
 
 export interface AsyncRequest<DataType, PayloadType> {
-    action: string;
-    state: string;
-    initialState: DataType;
+    action: string
+    state: string
+    initialState: DataType
 
-    api(payload: PayloadType): Promise<AxiosResponse>;
+    api(payload: PayloadType): Promise<AxiosResponse>
 }
-
 
 //비동기 요청에서 state 만 추출
 const makeAsyncRequestState = <T, U>(
     asyncRequests: readonly AsyncRequest<T, U>[] | [],
 ): Record<string, AsyncState<T>> => {
-    return asyncRequests.reduce((acc, { state, initialState }) => {
-        acc[state] = reducerUtils.init(initialState)
-        return acc
-    }, {} as Record<string, AsyncState<T>>)
+    return asyncRequests.reduce(
+        (acc, { state, initialState }) => {
+            acc[state] = reducerUtils.init(initialState)
+            return acc
+        },
+        {} as Record<string, AsyncState<T>>,
+    )
 }
 
-
-const getErrorMessage = (status: number, fallbackMessage: string, responseData?: any): string => {
+const getErrorMessage = (
+    status: number,
+    fallbackMessage: string,
+    responseData?: any,
+): string => {
     const messages: Record<number, string> = {
         400: '잘못된 요청입니다.',
         401: '인증 오류 발생: 로그인 해주세요.',
@@ -75,19 +85,25 @@ const getErrorMessage = (status: number, fallbackMessage: string, responseData?:
     return messages[status] || responseData?.message || fallbackMessage
 }
 
-
 const createRequestSaga = <PayloadType, ResponseType>(
     prefix: string,
     reducerName: string,
-    api: (payload: PayloadType) => Promise<AxiosResponse<ResponseType>>
+    api: (payload: PayloadType) => Promise<AxiosResponse<ResponseType>>,
 ) => {
     return function* fetchApiData(action: AnyAction) {
         try {
-            const response: AxiosResponse<ResponseType> = yield call(api, action.payload)
+            const response: AxiosResponse<ResponseType> = yield call(
+                api,
+                action.payload,
+            )
             const { status, data } = response
 
             if (status >= 400) {
-                const errorMessage = getErrorMessage(status, '요청 처리 중 오류가 발생했습니다.', data)
+                const errorMessage = getErrorMessage(
+                    status,
+                    '요청 처리 중 오류가 발생했습니다.',
+                    data,
+                )
                 yield put({
                     type: `${prefix}/${reducerName}Fail`,
                     payload: errorMessage,
@@ -110,17 +126,15 @@ const createRequestSaga = <PayloadType, ResponseType>(
     }
 }
 
-
 export function reduxMaker<
     LocalState,
-    AsyncRequests extends readonly AsyncRequest<unknown, unknown>[] = []
+    AsyncRequests extends readonly AsyncRequest<unknown, unknown>[] = [],
 >(
     prefix: string,
     asyncRequests: AsyncRequests | [],
     localState: LocalState,
     localReducers: SliceCaseReducers<LocalState>,
 ) {
-
     // state 생성 로컬 state + 비동기 state
     const asyncState = makeAsyncRequestState(asyncRequests)
     const allInitialState = {
@@ -129,15 +143,16 @@ export function reduxMaker<
     }
 
     //비동기 리듀서 생성
-    const asyncReducers = asyncRequests.reduce((reducers, { action, state: stateKey }) => ({
-        ...reducers,
-        [action]: (state: typeof asyncState) => ({
-            ...state,
-            [stateKey]: reducerUtils.loading(state[stateKey]?.data),
+    const asyncReducers = asyncRequests.reduce(
+        (reducers, { action, state: stateKey }) => ({
+            ...reducers,
+            [action]: (state: typeof asyncState) => ({
+                ...state,
+                [stateKey]: reducerUtils.loading(state[stateKey]?.data),
+            }),
         }),
-    }), {})
-
-
+        {},
+    )
 
     const slice = createSlice({
         name: prefix,
@@ -165,9 +180,7 @@ export function reduxMaker<
                 createRequestSaga(prefix, action, api),
             )
         }
-    } as (() => SagaIterator)
-
-
+    } as () => SagaIterator
 
     return {
         slice,

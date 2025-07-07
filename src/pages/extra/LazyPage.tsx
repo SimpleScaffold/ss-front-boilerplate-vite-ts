@@ -1,9 +1,5 @@
 const LazyPage = () => {
-    return (
-        <div>
-            xxxxxxxxxxxxxxxxxxxx
-        </div>
-    )
+    return <div>xxxxxxxxxxxxxxxxxxxx</div>
 }
 
 export default LazyPage
