@@ -12,8 +12,7 @@ type ColorPickerProps = {
     label: string
 }
 
-const ColorPicker = ({ variableKey , color, onChange, label }: ColorPickerProps) => {
-
+const ColorPicker = ({ variableKey, color, onChange, label }: ColorPickerProps) => {
     const [localColor, setLocalColor] = useState(color)
 
     useEffect(() => {
@@ -22,35 +21,31 @@ const ColorPicker = ({ variableKey , color, onChange, label }: ColorPickerProps)
 
     const dispatch = useDispatch()
 
-    const debouncedDispatch = useMemo(
-        () => debounce((key: string, value: string) => {
-            dispatch(themeAction.setColor({ key, value }))
-            onChange?.(value)
-        }, 30),
+    const debouncedUpdate = useMemo(
+        () =>
+            debounce((key: string, value: string) => {
+                dispatch(themeAction.setColor({ key, value }))
+                onChange(value)
+            }, 200),
         [dispatch, onChange]
     )
+
+    useEffect(() => {
+        return () => {
+            debouncedUpdate.cancel()
+        }
+    }, [debouncedUpdate])
+
+    const handleColorChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const newColor = hexToOklch(e.target.value)
+        setLocalColor(newColor)
+        debouncedUpdate(variableKey, newColor)
+    }
 
     const displayHexColor = useMemo(() => {
         if (localColor?.startsWith('#')) return localColor
         return oklchToHex(localColor)
     }, [localColor])
-
-    const debouncedOnChange = useMemo(
-        () => debounce((value: string) => onChange(value), 30),
-        [onChange],
-    )
-
-    const handleColorChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const newColor = hexToOklch(e.target.value)
-        setLocalColor(newColor)
-        debouncedDispatch(variableKey,newColor)
-    }
-
-    useEffect(() => {
-        return () => {
-            debouncedOnChange.cancel()
-        }
-    }, [debouncedOnChange])
 
     return (
         <div className="mb-3">
@@ -75,10 +70,9 @@ const ColorPicker = ({ variableKey , color, onChange, label }: ColorPickerProps)
                         className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                     />
                 </div>
-                <Label
-                    className={'bg-input/25 border-border/20 h-8 flex-1 rounded border px-2 text-sm'}
-                >{localColor}</Label>
-
+                <Label className="bg-input/25 border-border/20 h-8 flex-1 rounded border px-2 text-sm">
+                    {localColor}
+                </Label>
             </div>
         </div>
     )
