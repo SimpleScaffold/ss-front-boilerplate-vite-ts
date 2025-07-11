@@ -1,5 +1,3 @@
-[한국어 설명서는 여기에서 볼 수 있습니다.](./README.ko.md)
-
 ---
 
 # 📚 ss-react-boilerplate-ts User Guide
@@ -204,4 +202,4 @@ export const store = configureStore({
 
 ---
 
-If you need more detailed examples or explanations for any section, please let me know!
+If you need more detailed examples or explanations for any section, please let me know! 
