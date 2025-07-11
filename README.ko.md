@@ -2,19 +2,51 @@
 
 # 📚 ss-react-boilerplate-ts 사용설명서
 
-## 목차
-0. [프로젝트 구조(FSD 관점)](#프로젝트-구조fsd-관점)
-1. [프로젝트 개요](#프로젝트-개요)
-2. [주요 기술 스택](#주요-기술-스택)
-3. [설치 및 실행](#설치-및-실행)
-4. [상태관리 구조](#상태관리-구조)
-5. [테마 및 색상 설정](#테마-및-색상-설정)
-6. [액션 명명 규칙](#액션-명명-규칙)
-7. [리듀서 사용법 (동기/비동기)](#리듀서-사용법-동기비동기)
-8. [동적 라우팅 구조](#동적-라우팅-구조)
-9. [SS Components & shadcn 라이브러리 이슈](#ss-components--shadcn-라이브러리-이슈)
-10. [코드 스타일(Prettier) 적용법](#코드-스타일prettier-적용법)
-11. [기타 TODO 및 개선사항](#기타-todo-및-개선사항)
+## 🛠️ Stack
+
+<div align="center">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=HTML5&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/Redux-764ABC?style=flat&logo=Redux&logoColor=white" />
+  <img src="https://img.shields.io/badge/Redux Toolkit-EF4444?style=flat&logo=redux&logoColor=white" />
+  <img src="https://img.shields.io/badge/Redux Saga-999999?style=flat&logo=redux-saga&logoColor=white" />
+  <img src="https://img.shields.io/badge/React Router-CA4245?style=flat&logo=react-router&logoColor=white" />
+  <img src="https://img.shields.io/badge/shadcn/ui-000000?style=flat&logo=shadcnui&logoColor=white" />
+</div>
+<div align="center">
+  <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/Storybook-FF4785?style=flat&logo=storybook&logoColor=white" />
+  <img src="https://img.shields.io/badge/Cypress-17202C?style=flat&logo=cypress&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vitest-6E9F18?style=flat&logo=vitest&logoColor=white" />
+  <img src="https://img.shields.io/badge/Playwright-2EAD33?style=flat&logo=playwright&logoColor=white" />
+</div>
+<div align="center">
+  <img src="https://img.shields.io/badge/Prettier-F7B93E?style=flat&logo=prettier&logoColor=white" />
+  <img src="https://img.shields.io/badge/ESLint-4B32C3?style=flat&logo=eslint&logoColor=white" />
+  <img src="https://img.shields.io/badge/i18next-26A69A?style=flat&logo=i18next&logoColor=white" />
+  <img src="https://img.shields.io/badge/Framer Motion-EF008C?style=flat&logo=framer&logoColor=white" />
+  <img src="https://img.shields.io/badge/Lucide React-000000?style=flat&logo=lucide&logoColor=white" />
+  <img src="https://img.shields.io/badge/Yarn4-2C8EBB?style=flat&logo=yarn&logoColor=white" />
+</div>
+
+---
+
+## 📑 목차
+
+0. 🗂️ [프로젝트 구조(FSD 관점)](#프로젝트-구조fsd-관점)
+1. 🚀 [프로젝트 개요](#프로젝트-개요)
+2. 🛠️ [주요 기술 스택](#주요-기술-스택)
+3. ⚡ [설치 및 실행](#설치-및-실행)
+4. 🏗️ [상태관리 구조](#상태관리-구조)
+5. 🎨 [테마 및 색상 설정](#테마-및-색상-설정)
+6. 🏷️ [액션 명명 규칙](#액션-명명-규칙)
+7. 🔄 [리듀서 사용법 (동기/비동기)](#리듀서-사용법-동기비동기)
+8. 🧭 [동적 라우팅 구조](#동적-라우팅-구조)
+9. 🧩 [SS Components & shadcn 라이브러리 이슈](#ss-components--shadcn-라이브러리-이슈)
+10. 🧹 [코드 스타일(Prettier) 적용법](#코드-스타일prettier-적용법)
+11. 📝 [기타 TODO 및 개선사항](#기타-todo-및-개선사항)
 
 ---
 
@@ -67,14 +99,25 @@ src/
 ---
 
 ## 2. 주요 기술 스택
-- **React 18**
-- **TypeScript**
+- **React 19**
+- **TypeScript 5**
 - **Redux Toolkit** (상태관리)
-- **Vite** (번들러)
+- **Redux**
+- **Redux-Saga**
+- **Typesafe-Actions**
+- **React-Redux**
+- **React-Router v7**
+- **Vite 6** (번들러)
+- **Storybook 8** (UI 문서화)
+- **Cypress 14** (E2E 테스트)
+- **Vitest 3** (단위 테스트)
+- **Playwright** (브라우저 테스트)
+- **TailwindCSS 4**
+- **Prettier 3** & **prettier-plugin-tailwindcss**
 - **shadcn/ui** (UI 컴포넌트)
-- **Prettier** (코드 포맷터)
-- **Cypress** (E2E 테스트)
 - **i18next** (다국어 지원)
+- **Framer Motion** (애니메이션)
+- **Lucide-react** (아이콘)
 
 ---
 
@@ -82,7 +125,23 @@ src/
 
 ```bash
 yarn install
-yarn dev
+yarn dev           # 개발 서버 실행
+yarn build         # 프로덕션 빌드
+yarn preview       # 빌드 미리보기
+yarn lint          # ESLint 실행
+```
+
+### Storybook
+```bash
+yarn storybook         # 스토리북 실행
+yarn build-storybook   # 스토리북 정적 사이트 빌드
+```
+
+### 테스트
+```bash
+yarn test        # 단위 테스트(Vitest)
+yarn test:run    # 전체 테스트 CI 모드 실행
+yarn cypress     # (설정 시) Cypress E2E 테스트 실행
 ```
 
 ---
@@ -90,23 +149,9 @@ yarn dev
 ## 4. 상태관리 구조
 
 - **Redux Toolkit**을 사용하여 전역 상태를 관리합니다.
-- `src/app/store/redux/` 폴더에 store, hooks, utils가 위치합니다.
+- store, hooks, utils는 `src/app/store/redux/`에 위치합니다.
 - 각 feature별로 slice(reducer)를 생성하여 관리합니다.
-- 비동기 처리는 createAsyncThunk를 활용합니다.
-
-### 예시
-```ts
-// src/app/store/redux/reduxStore.tsx
-import { configureStore } from '@reduxjs/toolkit';
-import sampleReducer from 'src/features/sample/sampleReducer';
-
-export const store = configureStore({
-  reducer: {
-    sample: sampleReducer,
-    // ...다른 리듀서
-  },
-});
-```
+- 비동기 처리는 createAsyncThunk 또는 redux-saga로 처리할 수 있습니다.
 
 ---
 
@@ -116,6 +161,7 @@ export const store = configureStore({
 - 테마 색상은 `src/shared/components/lib/shadcn/styles/shadcn.pcss` 및 `colorConstants.tsx`에서 관리
 - 색상 커스터마이징은 [shadcn-ui-theme-generator](https://zippystarter.com/tools/shadcn-ui-theme-generator)에서 추출 후  
   `src/shared/components/lib/shadcn/styles/shadcn-variables.css`에 적용
+- **TailwindCSS**로 유틸리티 스타일링 적용
 
 ---
 
@@ -134,25 +180,11 @@ export const store = configureStore({
 
 ### 동기 리듀서
 - 일반적인 slice reducer로 관리
-- 예시:
-  ```ts
-  reducers: {
-    setValue: (state, action) => { state.value = action.payload; }
-  }
-  ```
 
 ### 비동기 리듀서
-- `createAsyncThunk`로 비동기 액션 생성
+- 비동기 액션은 `createAsyncThunk`로 생성하거나,
+- 복잡한 사이드이펙트는 **redux-saga**로 처리할 수 있음
 - extraReducers에서 pending/fulfilled/rejected 처리
-- 예시:
-  ```ts
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchData.pending, (state) => { state.loading = true; })
-      .addCase(fetchData.fulfilled, (state, action) => { state.data = action.payload; })
-      .addCase(fetchData.rejected, (state) => { state.error = true; });
-  }
-  ```
 
 ---
 
@@ -184,6 +216,7 @@ export const store = configureStore({
     jetbrains://WebStorm/settings?name=%EC%96%B8%EC%96%B4+%EB%B0%8F+%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC--JavaScript--Prettier  
     에서 자동 활성화 또는 저장 시 적용 활성화
 - **TODO**: 커밋 시 자동 적용 (ex. husky 등 도입 필요)
+- **TailwindCSS**는 prettier-plugin-tailwindcss로 자동 정렬
 
 ---
 
