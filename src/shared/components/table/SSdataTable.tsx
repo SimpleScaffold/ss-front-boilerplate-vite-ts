@@ -3,6 +3,8 @@ import {
     getCoreRowModel,
     getPaginationRowModel,
     useReactTable,
+    SortingState,
+    getSortedRowModel,
 } from '@tanstack/react-table'
 import {
     Table,
@@ -15,6 +17,7 @@ import {
 import { DataTableProps } from './options/types.ts'
 import { renderPagination } from './options/pagination.tsx'
 import { VirtualizedTable } from './options/virtualized.tsx'
+import React from 'react'
 
 export function SSdataTable<TData, TValue>({
     columns,
@@ -33,6 +36,8 @@ export function SSdataTable<TData, TValue>({
 
     const { enabled: virtualEnabled = false } = virtualization
 
+    const [sorting, setSorting] = React.useState<SortingState>([])
+
     const table = useReactTable({
         data,
         columns,
@@ -44,6 +49,12 @@ export function SSdataTable<TData, TValue>({
                 pageIndex: 0,
             },
         },
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        state: {
+            sorting,
+        },
+
     })
 
     const paginationComponent = paginationEnabled

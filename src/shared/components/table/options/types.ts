@@ -141,5 +141,5 @@ export interface CellFormatOptions<T> {
      * @param row - 현재 행의 전체 데이터 객체
      * @returns 렌더링할 React 노드
      */
-    renderRaw?: (value: T[keyof T], row: T) => React.ReactNode
+    customCell?: (value: T[keyof T], row: T) => React.ReactNode
 }

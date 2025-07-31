@@ -10,7 +10,8 @@ import {
     DropdownMenuTrigger,
 } from 'src/shared/lib/shadcn/components/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
-import { createCellFormatter } from 'src/shared/components/table/options/colum.tsx'
+import { createCellFormatter } from 'src/shared/components/table/options/cellFormatter.tsx'
+import { createHeaderFormatter } from 'src/shared/components/table/options/headerFormatter.tsx'
 
 const Home = () => {
     type Payment = {
@@ -27,7 +28,12 @@ const Home = () => {
         },
         {
             accessorKey: 'email',
-            header: 'Email',
+            ...createHeaderFormatter({
+                label: 'Email',
+                align: 'center',
+                sort: true,
+
+            }),
             size: 50,
         },
         {
@@ -75,65 +81,26 @@ const Home = () => {
     ]
 
     const data: Payment[] = [
-        {
-            id: '728ed52f',
-            amount: 100,
-            status: 'pending',
-            email: 'm@example.com',
-        },
-        {
-            id: '489e1d42',
-            amount: 125,
-            status: 'processing',
-            email: 'example@gmail.com',
-        },
-        {
-            id: 'a1b2c3d4',
-            amount: 250,
-            status: 'success',
-            email: 'john@example.com',
-        },
-        {
-            id: 'd4e5f6g7',
-            amount: 75,
-            status: 'failed',
-            email: 'jane@example.com',
-        },
-        {
-            id: 'h8i9j0k1',
-            amount: 330,
-            status: 'pending',
-            email: 'user1@example.com',
-        },
-        {
-            id: 'l2m3n4o5',
-            amount: 180,
-            status: 'success',
-            email: 'user2@example.com',
-        },
-        {
-            id: 'p6q7r8s9',
-            amount: 99,
-            status: 'processing',
-            email: 'user3@example.com',
-        },
-        {
-            id: 't0u1v2w3',
-            amount: 420,
-            status: 'failed',
-            email: 'user4@example.com',
-        },
-        {
-            id: 'x4y5z6a7',
-            amount: 150,
-            status: 'success',
-            email: 'user5@example.com',
-        },
-    ]
+        { id: '728ed52f', amount: 100, status: 'pending', email: 'm@example.com' },
+        { id: '489e1d42', amount: 125, status: 'processing', email: 'example@gmail.com' },
+        { id: 'a1b2c3d4', amount: 250, status: 'success', email: 'john@example.com' },
+        { id: 'd4e5f6g7', amount: 75, status: 'failed', email: 'jane@example.com' },
+        { id: 'h8i9j0k1', amount: 330, status: 'pending', email: 'user1@example.com' },
+        { id: 'l2m3n4o5', amount: 180, status: 'success', email: 'user2@example.com' },
+        { id: 'p6q7r8s9', amount: 99, status: 'processing', email: 'user3@example.com' },
+        { id: 't0u1v2w3', amount: 420, status: 'failed', email: 'user4@example.com' },
+        { id: 'x4y5z6a7', amount: 150, status: 'success', email: 'user5@example.com' },
+
+
+    ];
 
     return (
         <div>
-            <SSdataTable columns={columns} data={data} />
+            <SSdataTable
+                columns={columns}
+                data={data}
+
+            />
         </div>
     )
 }
