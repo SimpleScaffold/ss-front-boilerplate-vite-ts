@@ -12,40 +12,36 @@ import {
 } from 'src/shared/lib/shadcn/components/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
 
-
-
-
 const Home = () => {
-
-
     type Payment = {
         id: string
         amount: number
-        status: "pending" | "processing" | "success" | "failed"
+        status: 'pending' | 'processing' | 'success' | 'failed'
         email: string
     }
     const columns: ColumnDef<Payment>[] = [
         {
-            accessorKey: "status",
-            header: "Status",
+            accessorKey: 'status',
+            header: 'Status',
         },
         {
-            accessorKey: "email",
-            header: "Email",
+            accessorKey: 'email',
+            header: 'Email',
         },
         {
-            accessorKey: "amount",
+            accessorKey: 'amount',
             header: () => <div className="text-right">Amount</div>,
             ...createCellFormatter({
-                key: "amount",
-                format: "currency",
-                align: "left",
+                key: 'amount',
+                format: 'currency',
+                align: 'left',
             }),
         },
         {
-            id: "actions",
+            id: 'actions',
             cell: ({ row }) => {
                 const payment = row.original
+                //todo 이거 컴포넌트화 어떻게 범위를 어디까지 할지 고민중
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -57,13 +53,17 @@ const Home = () => {
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(payment.id)}
+                                onClick={() =>
+                                    navigator.clipboard.writeText(payment.id)
+                                }
                             >
                                 Copy payment ID
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>View customer</DropdownMenuItem>
-                            <DropdownMenuItem>View payment details</DropdownMenuItem>
+                            <DropdownMenuItem>
+                                View payment details
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 )
@@ -71,33 +71,34 @@ const Home = () => {
         },
     ]
 
-    const data: Payment[] =  [
+    const data: Payment[] = [
         {
-            id: "728ed52f",
+            id: '728ed52f',
             amount: 100,
-            status: "pending",
-            email: "m@example.com",
+            status: 'pending',
+            email: 'm@example.com',
         },
         {
-            id: "489e1d42",
+            id: '489e1d42',
             amount: 125,
-            status: "processing",
-            email: "example@gmail.com",
+            status: 'processing',
+            email: 'example@gmail.com',
         },
-
     ]
 
-
-    return <div>
-
-
-        <SSdataTable
-            columns={columns}
-            data={data}
-        />
-
-
-    </div>
+    return (
+        <div>
+            <SSdataTable
+                columns={columns}
+                data={data}
+                pagination={{
+                    enabled: true,
+                    position: 'bottom',
+                    align: 'center',
+                }}
+            />
+        </div>
+    )
 }
 
 export default Home
