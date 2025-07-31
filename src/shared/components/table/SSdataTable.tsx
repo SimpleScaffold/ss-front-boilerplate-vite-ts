@@ -39,10 +39,10 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function SSdataTable<TData, TValue>({
-    columns,
-    data,
-    pagination = {},
-}: DataTableProps<TData, TValue>) {
+                                               columns,
+                                               data,
+                                               pagination = {},
+                                           }: DataTableProps<TData, TValue>) {
     const {
         enabled = false,
         pageSize = 10,
@@ -56,12 +56,13 @@ export function SSdataTable<TData, TValue>({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
-        ...(enabled && { getPaginationRowModel: getPaginationRowModel() }),
-        initialState: enabled
-            ? {
-                  pagination: { pageSize },
-              }
-            : {},
+        getPaginationRowModel: getPaginationRowModel(),
+        initialState: {
+            pagination: {
+                pageSize: enabled ? pageSize : data.length || 1000000,
+                pageIndex: 0
+            },
+        },
     })
 
     const generatePageNumbers = () => {
@@ -100,8 +101,8 @@ export function SSdataTable<TData, TValue>({
             align === 'center'
                 ? 'justify-center'
                 : align === 'left'
-                  ? 'justify-start'
-                  : 'justify-end'
+                    ? 'justify-start'
+                    : 'justify-end'
 
         const currentPage = table.getState().pagination.pageIndex + 1
         const totalPages = table.getPageCount()
@@ -114,11 +115,7 @@ export function SSdataTable<TData, TValue>({
                         <PaginationItem>
                             <PaginationPrevious
                                 onClick={() => table.previousPage()}
-                                className={
-                                    !table.getCanPreviousPage()
-                                        ? 'pointer-events-none opacity-50'
-                                        : 'cursor-pointer'
-                                }
+                                className={!table.getCanPreviousPage() ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                             />
                         </PaginationItem>
 
@@ -129,9 +126,7 @@ export function SSdataTable<TData, TValue>({
                                     <>
                                         <PaginationItem>
                                             <PaginationLink
-                                                onClick={() =>
-                                                    table.setPageIndex(0)
-                                                }
+                                                onClick={() => table.setPageIndex(0)}
                                                 isActive={currentPage === 1}
                                                 className="cursor-pointer"
                                             >
@@ -150,9 +145,7 @@ export function SSdataTable<TData, TValue>({
                                 {pageNumbers.map((pageNum) => (
                                     <PaginationItem key={pageNum}>
                                         <PaginationLink
-                                            onClick={() =>
-                                                table.setPageIndex(pageNum - 1)
-                                            }
+                                            onClick={() => table.setPageIndex(pageNum - 1)}
                                             isActive={currentPage === pageNum}
                                             className="cursor-pointer"
                                         >
@@ -162,25 +155,17 @@ export function SSdataTable<TData, TValue>({
                                 ))}
 
                                 {/* 마지막 페이지와 ellipsis */}
-                                {pageNumbers[pageNumbers.length - 1] <
-                                    totalPages && (
+                                {pageNumbers[pageNumbers.length - 1] < totalPages && (
                                     <>
-                                        {pageNumbers[pageNumbers.length - 1] <
-                                            totalPages - 1 && (
+                                        {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && (
                                             <PaginationItem>
                                                 <PaginationEllipsis />
                                             </PaginationItem>
                                         )}
                                         <PaginationItem>
                                             <PaginationLink
-                                                onClick={() =>
-                                                    table.setPageIndex(
-                                                        totalPages - 1,
-                                                    )
-                                                }
-                                                isActive={
-                                                    currentPage === totalPages
-                                                }
+                                                onClick={() => table.setPageIndex(totalPages - 1)}
+                                                isActive={currentPage === totalPages}
                                                 className="cursor-pointer"
                                             >
                                                 {totalPages}
@@ -194,11 +179,7 @@ export function SSdataTable<TData, TValue>({
                         <PaginationItem>
                             <PaginationNext
                                 onClick={() => table.nextPage()}
-                                className={
-                                    !table.getCanNextPage()
-                                        ? 'pointer-events-none opacity-50'
-                                        : 'cursor-pointer'
-                                }
+                                className={!table.getCanNextPage() ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                             />
                         </PaginationItem>
                     </PaginationContent>
@@ -214,19 +195,25 @@ export function SSdataTable<TData, TValue>({
                 renderPagination()}
 
             <div className="overflow-hidden rounded-md border">
-                <Table>
+                <Table className="table-fixed w-full">
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>
+                                    <TableHead
+                                        key={header.id}
+                                        className="truncate"
+                                        style={{
+                                            width: header.getSize() !== 150 ? `${header.getSize()}px` : `${100 / headerGroup.headers.length}%`
+                                        }}
+                                    >
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
-                                                  header.column.columnDef
-                                                      .header,
-                                                  header.getContext(),
-                                              )}
+                                                header.column.columnDef
+                                                    .header,
+                                                header.getContext(),
+                                            )}
                                     </TableHead>
                                 ))}
                             </TableRow>
@@ -242,7 +229,10 @@ export function SSdataTable<TData, TValue>({
                                     }
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell
+                                            key={cell.id}
+                                            className="truncate"
+                                        >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext(),

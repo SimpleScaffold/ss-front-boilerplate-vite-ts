@@ -23,10 +23,12 @@ const Home = () => {
         {
             accessorKey: 'status',
             header: 'Status',
+            size: 200,
         },
         {
             accessorKey: 'email',
             header: 'Email',
+            size: 50,
         },
         {
             accessorKey: 'amount',
@@ -102,7 +104,7 @@ const Home = () => {
         { id: 'v0w1x2y3', amount: 230, status: 'processing', email: 'user24@example.com' },
         { id: 'z4a5b6c7', amount: 310, status: 'success', email: 'user25@example.com' },
         { id: 'd8e9f0g1', amount: 110, status: 'failed', email: 'user26@example.com' },
-        
+
     ];
 
     return (
@@ -111,9 +113,8 @@ const Home = () => {
                 columns={columns}
                 data={data}
                 pagination={{
-                    enabled: true,
-                    position: 'bottom',
-                    align: 'center',
+
+
                 }}
             />
         </div>
