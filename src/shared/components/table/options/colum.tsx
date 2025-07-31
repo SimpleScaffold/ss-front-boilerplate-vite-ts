@@ -1,8 +1,5 @@
-import React from 'react'
-
-type CellAlign = 'left' | 'center' | 'right';
-type CellFormatType = 'text' | 'currency' | 'percentage' | 'date';
-type Region = 'kr' | 'us' | 'jp' | 'cn' | 'eu';
+import React from 'react';
+import { CellFormatOptions, Region } from 'src/shared/components/table/options/types.ts'
 
 const regionFormatMap: Record<Region, { locale: string; currency: string }> = {
     kr: { locale: 'ko-KR', currency: 'KRW' },
@@ -11,17 +8,6 @@ const regionFormatMap: Record<Region, { locale: string; currency: string }> = {
     cn: { locale: 'zh-CN', currency: 'CNY' },
     eu: { locale: 'de-DE', currency: 'EUR' },
 };
-
-// 셀 포맷 옵션에 제네릭 T 추가
-interface CellFormatOptions<T> {
-    key: keyof T; // T의 키만 허용
-    align?: CellAlign;
-    format?: CellFormatType;
-    region?: Region;
-    prefix?: string;
-    suffix?: string;
-    renderRaw?: (value: T[keyof T], row: T) => React.ReactNode; // any 제거
-}
 
 // 셀 포맷터 생성기
 export const createCellFormatter = <T extends object>(
