@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { SSdataTable } from 'src/shared/components/table/SSdataTable.tsx'
+import { createCellFormatter } from 'src/shared/components/table/options/columns/cellFormatter.tsx'
 
 
 
@@ -25,15 +26,11 @@ const Home = () => {
         {
             accessorKey: "amount",
             header: () => <div className="text-right">Amount</div>,
-            cell: ({ row }) => {
-                const amount = parseFloat(row.getValue("amount"))
-                const formatted = new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                }).format(amount)
-
-                return <div className="text-right font-medium">{formatted}</div>
-            },
+            ...createCellFormatter({
+                key: "amount",
+                format: "currency",
+                align: "left",
+            }),
         },
     ]
 
