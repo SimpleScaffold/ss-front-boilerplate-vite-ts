@@ -41,6 +41,7 @@ const Home = () => {
         },
         {
             id: 'actions',
+            header: 'Actions',
             cell: ({ row }) => {
                 const payment = row.original
                 //todo 이거 컴포넌트화 어떻게 범위를 어디까지 할지 고민중
@@ -112,10 +113,9 @@ const Home = () => {
             <SSdataTable
                 columns={columns}
                 data={data}
-                pagination={{
 
 
-                }}
+
             />
         </div>
     )

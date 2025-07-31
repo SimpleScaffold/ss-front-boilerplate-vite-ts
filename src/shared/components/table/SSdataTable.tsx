@@ -5,6 +5,7 @@ import {
     useReactTable,
     getPaginationRowModel,
 } from '@tanstack/react-table'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import {
     Table,
     TableBody,
@@ -22,6 +23,8 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from 'src/shared/lib/shadcn/components/ui/pagination'
+import { ScrollArea } from 'src/shared/lib/shadcn/components/ui/scroll-area'
+import { useRef, useEffect, useState } from 'react'
 
 interface PaginationOptions {
     enabled?: boolean
@@ -32,25 +35,44 @@ interface PaginationOptions {
     maxVisiblePages?: number
 }
 
+interface VirtualizationOptions {
+    enabled?: boolean
+    rowHeight?: number
+    containerHeight?: number
+    overscan?: number
+}
+
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     pagination?: PaginationOptions
+    virtualization?: VirtualizationOptions
 }
 
 export function SSdataTable<TData, TValue>({
                                                columns,
                                                data,
                                                pagination = {},
+                                               virtualization = {},
                                            }: DataTableProps<TData, TValue>) {
     const {
-        enabled = false,
-        pageSize = 10,
-        position = 'bottom',
-        align = 'right',
-        showPageNumbers = true,
-        maxVisiblePages = 5,
-    } = pagination
+        enabled: paginationEnabled = false, // 페이지네이션 활성화 여부 (기본값: false)
+        pageSize = 10, // 페이지당 표시할 행 개수 (기본값: 10)
+        position = 'bottom', // 페이지네이션 위치 (기본값: 하단)
+        align = 'right', // 페이지네이션 정렬 방향 (기본값: 우측 정렬)
+        showPageNumbers = true, // 페이지 번호 표시 여부 (기본값: true)
+        maxVisiblePages = 5, // 최대 표시할 페이지 번호 개수 (기본값: 5)
+    } = pagination // pagination 객체에서 옵션들을 추출
+
+    const {
+        enabled: virtualEnabled = !paginationEnabled, // 가상화 활성화 여부 (기본값: 페이지네이션이 비활성화일 때 true)
+        rowHeight = 52, // 각 행의 높이 (기본값: 52px)
+        containerHeight = 400, // 테이블 컨테이너의 높이 (기본값: 400px)
+        overscan = 5, // 가상화 시 미리 렌더링할 추가 행 개수 (기본값: 5)
+    } = virtualization // virtualization 객체에서 옵션들을 추출
+
+    const parentRef = useRef<HTMLDivElement>(null)
+    const [scrollElement, setScrollElement] = useState<HTMLElement | null>(null)
 
     const table = useReactTable({
         data,
@@ -59,14 +81,31 @@ export function SSdataTable<TData, TValue>({
         getPaginationRowModel: getPaginationRowModel(),
         initialState: {
             pagination: {
-                pageSize: enabled ? pageSize : data.length || 1000000,
-                pageIndex: 0
+                pageSize: paginationEnabled ? pageSize : data.length,
+                pageIndex: 0,
             },
         },
     })
 
+    const { rows } = table.getRowModel()
+
+    // ScrollArea의 viewport 요소를 찾기
+    useEffect(() => {
+        if (parentRef.current && virtualEnabled) {
+            const viewport = parentRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement
+            setScrollElement(viewport)
+        }
+    }, [virtualEnabled])
+
+    const virtualizer = useVirtualizer({
+        count: rows.length,
+        getScrollElement: () => scrollElement,
+        estimateSize: () => rowHeight,
+        overscan,
+    })
+
     const generatePageNumbers = () => {
-        if (!showPageNumbers) return []
+        if (!showPageNumbers || !paginationEnabled) return []
 
         const currentPage = table.getState().pagination.pageIndex + 1
         const totalPages = table.getPageCount()
@@ -79,7 +118,6 @@ export function SSdataTable<TData, TValue>({
         let startPage = Math.max(1, currentPage - sidePages)
         let endPage = Math.min(totalPages, currentPage + sidePages)
 
-        // 시작 부분 조정
         if (endPage - startPage + 1 < maxVisiblePages) {
             if (startPage === 1) {
                 endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
@@ -92,11 +130,12 @@ export function SSdataTable<TData, TValue>({
         for (let i = startPage; i <= endPage; i++) {
             pages.push(i)
         }
-
         return pages
     }
 
     const renderPagination = () => {
+        if (!paginationEnabled) return null
+
         const justifyClass =
             align === 'center'
                 ? 'justify-center'
@@ -121,7 +160,6 @@ export function SSdataTable<TData, TValue>({
 
                         {showPageNumbers && (
                             <>
-                                {/* 첫 페이지와 ellipsis */}
                                 {pageNumbers[0] > 1 && (
                                     <>
                                         <PaginationItem>
@@ -141,7 +179,6 @@ export function SSdataTable<TData, TValue>({
                                     </>
                                 )}
 
-                                {/* 페이지 번호들 */}
                                 {pageNumbers.map((pageNum) => (
                                     <PaginationItem key={pageNum}>
                                         <PaginationLink
@@ -154,7 +191,6 @@ export function SSdataTable<TData, TValue>({
                                     </PaginationItem>
                                 ))}
 
-                                {/* 마지막 페이지와 ellipsis */}
                                 {pageNumbers[pageNumbers.length - 1] < totalPages && (
                                     <>
                                         {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && (
@@ -188,11 +224,105 @@ export function SSdataTable<TData, TValue>({
         )
     }
 
+    if (virtualEnabled) {
+        const virtualItems = virtualizer.getVirtualItems()
+
+        return (
+            <div>
+                {paginationEnabled && (position === 'top' || position === 'both') && renderPagination()}
+
+                <div className="rounded-md border">
+                    <ScrollArea
+                        ref={parentRef}
+                        style={{ height: containerHeight }}
+                        className="w-full"
+                    >
+                        <div style={{ height: virtualizer.getTotalSize() + rowHeight, width: '100%', position: 'relative' }}>
+                            {/* 고정 헤더 */}
+                            <div className="sticky top-0 z-10 bg-background border-b">
+                                <Table className="table-fixed w-full">
+                                    <TableHeader>
+                                        {table.getHeaderGroups().map((headerGroup) => (
+                                            <TableRow key={headerGroup.id}>
+                                                {headerGroup.headers.map((header) => (
+                                                    <TableHead
+                                                        key={header.id}
+                                                        className="truncate"
+                                                        style={{
+                                                            width: header.getSize() !== 150 ? `${header.getSize()}px` : `${100 / headerGroup.headers.length}%`,
+                                                            height: rowHeight
+                                                        }}
+                                                    >
+                                                        {header.isPlaceholder
+                                                            ? null
+                                                            : flexRender(
+                                                                header.column.columnDef.header,
+                                                                header.getContext(),
+                                                            )}
+                                                    </TableHead>
+                                                ))}
+                                            </TableRow>
+                                        ))}
+                                    </TableHeader>
+                                </Table>
+                            </div>
+
+                            {/* 가상화된 행들 */}
+                            {virtualItems.map((virtualRow) => {
+                                const row = rows[virtualRow.index]
+                                if (!row) return null
+
+                                return (
+                                    <div
+                                        key={row.id}
+                                        style={{
+                                            position: 'absolute',
+                                            top: rowHeight, // 헤더 높이만큼 오프셋
+                                            left: 0,
+                                            width: '100%',
+                                            height: `${virtualRow.size}px`,
+                                            transform: `translateY(${virtualRow.start}px)`,
+                                        }}
+                                    >
+                                        <Table className="table-fixed w-full">
+                                            <TableBody>
+                                                <TableRow
+                                                    data-state={row.getIsSelected() && 'selected'}
+                                                    style={{ height: rowHeight }}
+                                                >
+                                                    {row.getVisibleCells().map((cell) => (
+                                                        <TableCell
+                                                            key={cell.id}
+                                                            className="truncate"
+                                                            style={{
+                                                                width: cell.column.getSize() !== 150 ? `${cell.column.getSize()}px` : `${100 / row.getVisibleCells().length}%`
+                                                            }}
+                                                        >
+                                                            {flexRender(
+                                                                cell.column.columnDef.cell,
+                                                                cell.getContext(),
+                                                            )}
+                                                        </TableCell>
+                                                    ))}
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </ScrollArea>
+                </div>
+
+                {paginationEnabled && (position === 'bottom' || position === 'both') && renderPagination()}
+            </div>
+        )
+    }
+
+    // 일반 테이블 (페이지네이션 활성화 시)
     return (
         <div>
-            {enabled &&
-                (position === 'top' || position === 'both') &&
-                renderPagination()}
+            {paginationEnabled && (position === 'top' || position === 'both') && renderPagination()}
 
             <div className="overflow-hidden rounded-md border">
                 <Table className="table-fixed w-full">
@@ -210,8 +340,7 @@ export function SSdataTable<TData, TValue>({
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
-                                                header.column.columnDef
-                                                    .header,
+                                                header.column.columnDef.header,
                                                 header.getContext(),
                                             )}
                                     </TableHead>
@@ -224,9 +353,7 @@ export function SSdataTable<TData, TValue>({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    data-state={
-                                        row.getIsSelected() && 'selected'
-                                    }
+                                    data-state={row.getIsSelected() && 'selected'}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell
@@ -255,9 +382,7 @@ export function SSdataTable<TData, TValue>({
                 </Table>
             </div>
 
-            {enabled &&
-                (position === 'bottom' || position === 'both') &&
-                renderPagination()}
+            {paginationEnabled && (position === 'bottom' || position === 'both') && renderPagination()}
         </div>
     )
 }
