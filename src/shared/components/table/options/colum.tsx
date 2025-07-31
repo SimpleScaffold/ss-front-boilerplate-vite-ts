@@ -1,5 +1,8 @@
-import React from 'react';
-import { CellFormatOptions, Region } from 'src/shared/components/table/options/types.ts'
+import React from 'react'
+import {
+    CellFormatOptions,
+    Region,
+} from 'src/shared/components/table/options/types.ts'
 
 const regionFormatMap: Record<Region, { locale: string; currency: string }> = {
     kr: { locale: 'ko-KR', currency: 'KRW' },
@@ -7,13 +10,17 @@ const regionFormatMap: Record<Region, { locale: string; currency: string }> = {
     jp: { locale: 'ja-JP', currency: 'JPY' },
     cn: { locale: 'zh-CN', currency: 'CNY' },
     eu: { locale: 'de-DE', currency: 'EUR' },
-};
+}
 
 // 셀 포맷터 생성기
 export const createCellFormatter = <T extends object>(
-    options: CellFormatOptions<T>
+    options: CellFormatOptions<T>,
 ) => ({
-    cell: ({ row }: { row: { getValue: <K extends keyof T>(key: K) => T[K]; original: T } }) => {
+    cell: ({
+        row,
+    }: {
+        row: { getValue: <K extends keyof T>(key: K) => T[K]; original: T }
+    }) => {
         const {
             key,
             align = 'left',
@@ -22,43 +29,45 @@ export const createCellFormatter = <T extends object>(
             prefix = '',
             suffix = '',
             renderRaw,
-        } = options;
+        } = options
 
-        const { locale, currency } = regionFormatMap[region];
+        const { locale, currency } = regionFormatMap[region]
 
-        const rawValue = row.getValue(key);
-        let displayValue: React.ReactNode;
+        const rawValue = row.getValue(key)
+        let displayValue: React.ReactNode
 
         if (renderRaw) {
-            displayValue = renderRaw(rawValue, row.original);
+            displayValue = renderRaw(rawValue, row.original)
         } else {
             switch (format) {
                 case 'currency':
                     displayValue = new Intl.NumberFormat(locale, {
                         style: 'currency',
                         currency,
-                    }).format(Number(rawValue));
-                    break;
+                    }).format(Number(rawValue))
+                    break
                 case 'percentage':
-                    displayValue = `${Number(rawValue).toFixed(2)}%`;
-                    break;
+                    displayValue = `${Number(rawValue).toFixed(2)}%`
+                    break
                 case 'date':
-                    displayValue = new Date(String(rawValue)).toLocaleDateString(locale);
-                    break;
+                    displayValue = new Date(
+                        String(rawValue),
+                    ).toLocaleDateString(locale)
+                    break
                 case 'text':
                 default:
-                    displayValue = String(rawValue);
+                    displayValue = String(rawValue)
             }
 
-            displayValue = `${prefix}${displayValue}${suffix}`;
+            displayValue = `${prefix}${displayValue}${suffix}`
         }
 
         const alignClass = {
             left: 'text-left',
             center: 'text-center',
             right: 'text-right',
-        }[align];
+        }[align]
 
-        return <div className={`${alignClass} font-medium`}>{displayValue}</div>;
+        return <div className={`${alignClass} font-medium`}>{displayValue}</div>
     },
-});
+})
