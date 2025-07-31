@@ -1,5 +1,69 @@
+import { ColumnDef } from '@tanstack/react-table'
+import { SSdataTable } from 'src/shared/components/table/SSdataTable.tsx'
+
+
+
+
 const Home = () => {
-    return <div>asdasd</div>
+
+
+    type Payment = {
+        id: string
+        amount: number
+        status: "pending" | "processing" | "success" | "failed"
+        email: string
+    }
+    const columns: ColumnDef<Payment>[] = [
+        {
+            accessorKey: "status",
+            header: "Status",
+        },
+        {
+            accessorKey: "email",
+            header: "Email",
+        },
+        {
+            accessorKey: "amount",
+            header: () => <div className="text-right">Amount</div>,
+            cell: ({ row }) => {
+                const amount = parseFloat(row.getValue("amount"))
+                const formatted = new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                }).format(amount)
+
+                return <div className="text-right font-medium">{formatted}</div>
+            },
+        },
+    ]
+
+    const data: Payment[] =  [
+        {
+            id: "728ed52f",
+            amount: 100,
+            status: "pending",
+            email: "m@example.com",
+        },
+        {
+            id: "489e1d42",
+            amount: 125,
+            status: "processing",
+            email: "example@gmail.com",
+        },
+
+    ]
+
+
+    return <div>
+
+
+        <SSdataTable
+            columns={columns}
+            data={data}
+        />
+
+
+    </div>
 }
 
 export default Home

@@ -1,4 +1,4 @@
-import WhHeader from 'src/shared/layouts/WhHeader.tsx'
+import WhHeader from 'src/shared/layout/WhHeader.tsx'
 
 import React, { ReactNode } from 'react'
 

@@ -1,4 +1,4 @@
-import WhLayout from 'src/shared/layouts/WhLayout.tsx'
+import WhLayout from 'src/shared/layout/WhLayout.tsx'
 import Home from 'src/features/Home.tsx'
 
 const HomePage = () => {
