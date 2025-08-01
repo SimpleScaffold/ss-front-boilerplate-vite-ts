@@ -17,7 +17,7 @@ const Sample = () => {
         return () => {
             dispatch(sampleAction.initialize('value'))
         }
-    }, [])
+    }, [dispatch])
     const notify = () => toast('Wow so easy !')
 
     return (
