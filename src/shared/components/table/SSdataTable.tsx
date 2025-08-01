@@ -1,10 +1,11 @@
 import {
     flexRender,
     getCoreRowModel,
+    getFilteredRowModel,
     getPaginationRowModel,
-    useReactTable,
-    SortingState,
     getSortedRowModel,
+    SortingState,
+    useReactTable,
 } from '@tanstack/react-table'
 import {
     Table,
@@ -18,12 +19,14 @@ import { DataTableProps } from './options/types.ts'
 import { renderPagination } from './options/pagination.tsx'
 import { VirtualizedTable } from './options/virtualized.tsx'
 import React from 'react'
+import { Input } from 'src/shared/lib/shadcn/components/ui/input.tsx'
 
 export function SSdataTable<TData, TValue>({
     columns,
     data,
     pagination = {},
     virtualization = {},
+    search = {},
 }: DataTableProps<TData, TValue>) {
     const {
         enabled: paginationEnabled = false,
@@ -34,9 +37,17 @@ export function SSdataTable<TData, TValue>({
         maxVisiblePages = 5,
     } = pagination
 
+    const {
+        columns: searchColumns = [],
+        position: searchPosition = 'top',
+        align: searchAlign = 'left',
+        placeholder = '',
+    } = search
+
     const { enabled: virtualEnabled = false } = virtualization
 
     const [sorting, setSorting] = React.useState<SortingState>([])
+    const [globalFilter, setGlobalFilter] = React.useState('')
 
     const table = useReactTable({
         data,
@@ -51,11 +62,33 @@ export function SSdataTable<TData, TValue>({
         },
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
+        onGlobalFilterChange: setGlobalFilter,
+        getFilteredRowModel: getFilteredRowModel(),
         state: {
             sorting,
+            globalFilter,
         },
-
     })
+
+    const searchComponent =
+        searchColumns.length > 0 ? (
+            <div
+                className={`flex items-center py-4 ${
+                    {
+                        left: 'justify-start',
+                        center: 'justify-center',
+                        right: 'justify-end',
+                    }[searchAlign]
+                }`}
+            >
+                <Input
+                    placeholder={placeholder}
+                    value={globalFilter ?? ''}
+                    onChange={(event) => setGlobalFilter(event.target.value)}
+                    className="max-w-sm"
+                />
+            </div>
+        ) : null
 
     const paginationComponent = paginationEnabled
         ? renderPagination(table, showPageNumbers, maxVisiblePages, align)
@@ -64,6 +97,8 @@ export function SSdataTable<TData, TValue>({
     if (virtualEnabled) {
         return (
             <div>
+                {(searchPosition === 'top' || searchPosition === 'both') &&
+                    searchComponent}
                 {(position === 'top' || position === 'both') &&
                     paginationComponent}
                 <VirtualizedTable
@@ -72,12 +107,16 @@ export function SSdataTable<TData, TValue>({
                 />
                 {(position === 'bottom' || position === 'both') &&
                     paginationComponent}
+                {(searchPosition === 'bottom' || searchPosition === 'both') &&
+                    searchComponent}
             </div>
         )
     }
 
     return (
         <div>
+            {(searchPosition === 'top' || searchPosition === 'both') &&
+                searchComponent}
             {(position === 'top' || position === 'both') && paginationComponent}
             <div className="overflow-hidden rounded-md border">
                 <Table className="w-full table-fixed">
@@ -144,6 +183,8 @@ export function SSdataTable<TData, TValue>({
             </div>
             {(position === 'bottom' || position === 'both') &&
                 paginationComponent}
+            {(searchPosition === 'bottom' || searchPosition === 'both') &&
+                searchComponent}
         </div>
     )
 }
