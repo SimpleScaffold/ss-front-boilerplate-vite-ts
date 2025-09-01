@@ -4,6 +4,8 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
+    Row,
+    RowData,
     SortingState,
     useReactTable,
 } from '@tanstack/react-table'
@@ -20,6 +22,12 @@ import { renderPagination } from './options/pagination.tsx'
 import { VirtualizedTable } from './options/virtualized.tsx'
 import React from 'react'
 import { Input } from 'src/shared/lib/shadcn/components/ui/input.tsx'
+
+declare module '@tanstack/react-table' {
+    interface ColumnMeta<TData extends RowData, TValue> {
+        merge?: boolean
+    }
+}
 
 export function SSdataTable<TData, TValue>({
     columns,
@@ -114,12 +122,12 @@ export function SSdataTable<TData, TValue>({
     }
 
 
-    function getRowSpans<T>(
-        rows: any[],
+    function getRowSpans(
+        rows: Row<TData>[],
         columnId: string
     ): Record<string, number> {
         const spans: Record<string, number> = {};
-        let prevValue: any = null;
+        let prevValue: unknown = null;
         let startRowId: string | null = null;
         let count = 0;
 
@@ -179,7 +187,7 @@ export function SSdataTable<TData, TValue>({
                         {table.getRowModel().rows.map((row) => (
                             <TableRow key={row.id}>
                                 {row.getVisibleCells().map((cell) => {
-                                    const colDef = cell.column.columnDef as any;
+                                    const colDef = cell.column.columnDef;
                                     const mergeEnabled = colDef.meta?.merge;
 
                                     if (mergeEnabled) {
