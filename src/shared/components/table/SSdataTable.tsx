@@ -113,6 +113,35 @@ export function SSdataTable<TData, TValue>({
         )
     }
 
+
+    function getRowSpans<T>(
+        rows: any[],
+        columnId: string
+    ): Record<string, number> {
+        const spans: Record<string, number> = {};
+        let prevValue: any = null;
+        let startRowId: string | null = null;
+        let count = 0;
+
+        rows.forEach((row) => {
+            const value = row.getValue(columnId);
+
+            if (value === prevValue) {
+                count++;
+                spans[startRowId!] = count; // 첫 행에 누적 rowSpan
+                spans[row.id] = 0; // 병합된 나머지는 숨김
+            } else {
+                prevValue = value;
+                startRowId = row.id;
+                count = 1;
+                spans[row.id] = 1;
+            }
+        });
+
+        return spans;
+    }
+
+
     return (
         <div>
             {(searchPosition === 'top' || searchPosition === 'both') &&
@@ -147,37 +176,31 @@ export function SSdataTable<TData, TValue>({
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table.getRowModel().rows.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={
-                                        row.getIsSelected() && 'selected'
+                        {table.getRowModel().rows.map((row) => (
+                            <TableRow key={row.id}>
+                                {row.getVisibleCells().map((cell) => {
+                                    const colDef = cell.column.columnDef as any;
+                                    const mergeEnabled = colDef.meta?.merge;
+
+                                    if (mergeEnabled) {
+                                        const spans = getRowSpans(table.getRowModel().rows, cell.column.id);
+                                        const span = spans[row.id];
+                                        if (span === 0) return null;
+                                        return (
+                                            <TableCell key={cell.id} rowSpan={span} className="truncate">
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </TableCell>
+                                        );
                                     }
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell
-                                            key={cell.id}
-                                            className="truncate"
-                                        >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext(),
-                                            )}
+
+                                    return (
+                                        <TableCell key={cell.id} className="truncate">
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center"
-                                >
-                                    No results.
-                                </TableCell>
+                                    );
+                                })}
                             </TableRow>
-                        )}
+                        ))}
                     </TableBody>
                 </Table>
             </div>

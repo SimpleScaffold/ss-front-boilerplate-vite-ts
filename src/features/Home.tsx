@@ -25,6 +25,7 @@ const Home = () => {
             accessorKey: 'status',
             header: 'Status',
             size: 200,
+            meta: { merge: true },
         },
         {
             accessorKey: 'email',
@@ -87,11 +88,12 @@ const Home = () => {
             email: 'm@example.com',
         },
         {
-            id: '489e1d42',
-            amount: 125,
-            status: 'processing',
-            email: 'example@gmail.com',
+            id: 'l2m3n4o5',
+            amount: 180,
+            status: 'success',
+            email: 'user2@example.com',
         },
+
         {
             id: 'a1b2c3d4',
             amount: 250,
@@ -110,11 +112,12 @@ const Home = () => {
             status: 'pending',
             email: 'user1@example.com',
         },
+
         {
-            id: 'l2m3n4o5',
-            amount: 180,
-            status: 'success',
-            email: 'user2@example.com',
+            id: '489e1d42',
+            amount: 125,
+            status: 'processing',
+            email: 'example@gmail.com',
         },
         {
             id: 'p6q7r8s9',
