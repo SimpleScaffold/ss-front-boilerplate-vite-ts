@@ -13,11 +13,11 @@ type ColorPickerProps = {
 }
 
 const ColorPicker = ({
-    variableKey,
-    color,
-    onChange,
-    label,
-}: ColorPickerProps) => {
+                         variableKey,
+                         color,
+                         onChange,
+                         label,
+                     }: ColorPickerProps) => {
     const [localColor, setLocalColor] = useState(color)
 
     useEffect(() => {
@@ -28,10 +28,13 @@ const ColorPicker = ({
 
     const debouncedUpdate = useMemo(
         () =>
-            debounce((key: string, value: string) => {
-                dispatch(themeAction.setColor({ key, value }))
-                onChange(value)
-            }, 200),
+            debounce(
+                ((key: string, value: string) => {
+                    dispatch(themeAction.setColor({ key, value }))
+                    onChange(value)
+                }) as unknown as (...args: unknown[]) => void,
+                200,
+            ),
         [dispatch, onChange],
     )
 

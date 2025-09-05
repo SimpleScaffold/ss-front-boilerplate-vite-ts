@@ -1,4 +1,9 @@
-import { createSlice, Slice, SliceCaseReducers } from '@reduxjs/toolkit'
+import {
+    ActionReducerMapBuilder,
+    createSlice,
+    Slice,
+    SliceCaseReducers,
+} from '@reduxjs/toolkit'
 import { AxiosResponse, isAxiosError } from 'axios'
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { AnyAction, SagaIterator } from 'redux-saga'
@@ -85,8 +90,13 @@ const getErrorMessage = (
 
     let errorMessage = messages[status] || fallbackMessage
 
-    if (typeof responseData === 'object' && responseData !== null && 'message' in responseData) {
-        errorMessage = (responseData as { message: string }).message || errorMessage
+    if (
+        typeof responseData === 'object' &&
+        responseData !== null &&
+        'message' in responseData
+    ) {
+        errorMessage =
+            (responseData as { message: string }).message || errorMessage
     }
 
     return errorMessage
@@ -103,6 +113,7 @@ const createRequestSaga = <PayloadType, ResponseType>(
                 api,
                 action.payload,
             )
+
             const { status, data } = response
 
             if (status >= 400) {
@@ -125,7 +136,8 @@ const createRequestSaga = <PayloadType, ResponseType>(
                 payload: data,
             })
         } catch (error: unknown) {
-            const fallbackMessage = '서버에 문제가 있습니다. 관리자에게 문의하세요'
+            const fallbackMessage =
+                '서버에 문제가 있습니다. 관리자에게 문의하세요'
             const errorMessage = extractErrorMessage(error, fallbackMessage)
 
             yield put({
@@ -138,7 +150,11 @@ const createRequestSaga = <PayloadType, ResponseType>(
 
 function extractErrorMessage(error: unknown, fallback: string): string {
     if (isAxiosError(error) && error.response) {
-        return getErrorMessage(error.response.status, fallback, error.response.data)
+        return getErrorMessage(
+            error.response.status,
+            fallback,
+            error.response.data,
+        )
     }
 
     if (error instanceof Error) {
@@ -192,6 +208,36 @@ export function reduxMaker<
             },
             ...localReducers,
             ...asyncReducers,
+        },
+        extraReducers: (builder) => {
+            asyncRequests.forEach((request) => {
+                const { action, state: stateKey } = request
+
+                builder
+                    .addCase(
+                        `${prefix}/${action}Success`,
+                        (state, action: AnyAction) => {
+                            return {
+                                ...state,
+                                [stateKey]: reducerUtils.success(
+                                    action.payload,
+                                ),
+                            }
+                        },
+                    )
+                    .addCase(
+                        `${prefix}/${action}Fail`,
+                        (state, action: AnyAction) => {
+                            return {
+                                ...state,
+                                [stateKey]: reducerUtils.error(
+                                    state[stateKey]?.data,
+                                    action.payload,
+                                ),
+                            }
+                        },
+                    )
+            })
         },
     }) as Slice
 
