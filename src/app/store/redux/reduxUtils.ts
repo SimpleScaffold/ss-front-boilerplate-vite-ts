@@ -239,7 +239,7 @@ export function reduxMaker<
                     )
             })
         },
-    }) as Slice
+    }) as Slice<typeof allInitialState>
 
     const saga = function* () {
         for (const { action, api } of asyncRequests) {
