@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router'
 import { useEffect, useState } from 'react'
-import { useAppDispatch } from 'src/app/store/redux/reduxHooks.tsx'
+import { useAppDispatch } from 'src/globals/store/redux/reduxHooks.tsx'
 import { sampleAction } from 'src/features/sample/sampleReducer.ts'
 import { toast } from 'react-toastify'
 
